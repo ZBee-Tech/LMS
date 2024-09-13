@@ -5,9 +5,10 @@ const Header = () => {
   return (
     <header>
       <nav>
-        <ul>
+        <h1>Hy</h1>
+        {/* <ul>
           <li><Link to="/login">Login</Link></li>
-        </ul>
+        </ul> */}
       </nav>
     </header>
   );
