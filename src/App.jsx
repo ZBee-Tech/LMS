@@ -1,12 +1,13 @@
- import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/header';
 import Footer from './components/footer';
 import Sidebar from './components/sidebar';
 import LoginPage from './pages/login';
 import SignupPage from './pages/signup';
 import Dashboard from './pages/Dashboard';
-import './App.css';  // Global styles
+import LeaveRequestForm from './pages/Leave-req-form'; 
+import './App.css';
 
 const Layout = ({ children }) => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
+        <Route path="/leaveform" element={<Layout><LeaveRequestForm /></Layout>} />
       </Routes>
     </Router>
   );

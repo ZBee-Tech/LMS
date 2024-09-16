@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link } from 'react-router-dom';  
 import {
   MDBContainer,
   MDBCol,
@@ -50,15 +50,7 @@ const LoginPage = () => {
             <a href="#!">Forgot password?</a>
           </div>
 
-          <div className={styles.selectContainer}>
-            <h4 className={styles.selectLabel}>Select an Option</h4>
-            <select className={styles.selectBox}>
-              <option value="">Select Role</option>
-              <option value="1">Role 1</option>
-              <option value="2">Role 2</option>
-              <option value="3">Role 3</option>
-            </select>
-          </div>
+  
 
           <div className='text-center text-md-start mt-4 pt-2'>
             <MDBBtn className="mb-0 px-5" size='lg'>

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';  
+
 import {
   MDBContainer,
   MDBCol,
@@ -11,8 +13,7 @@ import {
 import styles from '../assets/CSS/SignupPage.module.css'; 
 
 const SignupPage = () => {
-  const [selectedOption, setSelectedOption] = useState('');
-
+ 
   return (
     <MDBContainer fluid className="p-3 my-5 h-100 d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
       <MDBRow className="d-flex justify-content-center align-items-center w-100">
@@ -56,17 +57,7 @@ const SignupPage = () => {
             size="lg"
           />
 
-          <div className={styles.selectContainer}>
-            <h4 className={styles.selectLabel}>Select an Option</h4>
-            <select className={styles.selectBox} onChange={(e) => setSelectedOption(e.target.value)}>
-              <option value="Select Role">Select Role</option>
-              <option value="1">Role 1</option>
-              <option value="2">Role 2</option>
-              <option value="3">Role 3</option>
-            </select>
-          </div>
-
-          <p className="mt-4">Selected Role: {selectedOption}</p>
+       
 
           <div className="d-flex justify-content-between mb-4">
             <MDBCheckbox
@@ -82,7 +73,7 @@ const SignupPage = () => {
               Sign Up
             </MDBBtn>
             <p className="small fw-bold mt-2 pt-1 mb-2">
-              Already have an account? <a href="#!" className="link-danger">Login</a>
+              Already have an account? <Link to="/" className="link-danger">Login</Link>
             </p>
           </div>
 
