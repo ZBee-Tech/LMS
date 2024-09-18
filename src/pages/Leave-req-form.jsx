@@ -1,14 +1,38 @@
 import React, { useState } from 'react';
-import styles from '../assets/CSS/LeaveRequestForm.module.css'; 
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';  
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';  
+import styles from '../assets/CSS/LeaveRequestForm.module.css';
 
 const LeaveRequestForm = () => {
   const [leaveType, setLeaveType] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState(null);  
+  const [endDate, setEndDate] = useState(null);  
   const [reason, setReason] = useState('');
+  
+  const today = new Date();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    if (!startDate || !endDate) {
+      toast.error('Please select both start and end dates.');
+      return;
+    }
+
+    if (startDate < today) {
+      toast.error('Start date cannot be in the past.');
+      return;
+    }
+
+    if (endDate < startDate) {
+      toast.error('End date must be after start date.');
+      return;
+    }
+
+    toast.success('Leave request submitted successfully!');
+    
     console.log({
       leaveType,
       startDate,
@@ -38,23 +62,25 @@ const LeaveRequestForm = () => {
 
           <div className={styles.formGroup}>
             <label htmlFor="startDate" className={styles.label}>Start Date</label>
-            <input 
-              type="date" 
-              id="startDate"
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
               className={styles.input}
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              dateFormat="yyyy/MM/dd"
+              placeholderText="Select start date"
+              minDate={today}  
             />
           </div>
 
           <div className={styles.formGroup}>
             <label htmlFor="endDate" className={styles.label}>End Date</label>
-            <input 
-              type="date" 
-              id="endDate"
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
               className={styles.input}
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              dateFormat="yyyy/MM/dd"
+              placeholderText="Select end date"
+              minDate={startDate ? startDate : today}  
             />
           </div>
 
@@ -76,6 +102,7 @@ const LeaveRequestForm = () => {
           </div>
         </form>
       </div>
+      <ToastContainer />  
     </div>
   );
 };

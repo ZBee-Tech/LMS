@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ref, set } from 'firebase/database';
-import { MDBContainer, MDBCol, MDBRow, MDBBtn, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { MDBContainer, MDBCol, MDBRow, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from '../assets/CSS/SignupPage.module.css';
-import { realtimeDb } from '../firebase-config';
+import { auth, db } from '../firebase-config';
+import { setDoc, doc } from "firebase/firestore";
 
 const SignupPage = () => {
   const [fullName, setFullName] = useState('');
@@ -14,43 +15,51 @@ const SignupPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('');
   const [loading, setLoading] = useState(false);
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    if (!termsAccepted) {
+      toast.error('You must agree to the terms and conditions.');
+      return;
+    }
+
     if (password !== confirmPassword) {
       toast.error('Passwords do not match.');
       return;
     }
-  
+
     if (!role) {
       toast.error('Please select a role.');
       return;
     }
-  
+
     try {
       setLoading(true);
-  
-      const userId = Date.now().toString();
-  
-      await set(ref(realtimeDb, 'users/' + userId), {
-        fullName,
-        email,
-        role,
-        createdAt: new Date().toISOString(),
-        password
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, "Users", user.uid), {
+        email: user.email,
+        fullName: fullName,
+        role: role
       });
-  
-      console.log('Data stored in Realtime Database');
-  
-      toast.success('Signup successful!');
-      
+
+      await sendEmailVerification(user);
+
+      setVerificationSent(true);
+      toast.success('Signup successful! Please check your email to verify your account.');
+
        setFullName('');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
       setRole('');
-  
+      setTermsAccepted(false);
+
     } catch (err) {
       console.error('Error during signup:', err);
       toast.error('Error during signup: ' + err.message);
@@ -58,7 +67,6 @@ const SignupPage = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <>
@@ -83,7 +91,6 @@ const SignupPage = () => {
                 size="lg"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                disabled={loading}
               />
               <MDBInput
                 wrapperClass='mb-4'
@@ -93,7 +100,6 @@ const SignupPage = () => {
                 size="lg"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={loading}
               />
               <MDBInput
                 wrapperClass='mb-4'
@@ -103,7 +109,6 @@ const SignupPage = () => {
                 size="lg"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                disabled={loading}
               />
               <MDBInput
                 wrapperClass='mb-4'
@@ -113,13 +118,11 @@ const SignupPage = () => {
                 size="lg"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                disabled={loading}
               />
               <select 
                 className="form-select mb-4"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                disabled={loading}
               >
                 <option value="">Select Role</option>
                 <option value="Employee">Employee</option>
@@ -131,14 +134,14 @@ const SignupPage = () => {
               <div className="d-flex justify-content-between mb-4">
                 <MDBCheckbox
                   name='terms'
-                  value=''
+                  value={termsAccepted}
                   id='termsCheckbox'
                   label='I agree to the terms and conditions'
-                  disabled={loading}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
                 />
               </div>
               <div className='text-center text-md-start mt-4 pt-2'>
-                <button type="submit" className="mb-0 px-5" size='lg' disabled={loading}>
+                <button type="submit" className="mb-0 px-5" size='lg' disabled={loading || verificationSent}>
                   {loading ? 'Signing Up...' : 'Sign Up'}
                 </button>
                 <p className="small fw-bold mt-2 pt-1 mb-2">
@@ -146,6 +149,11 @@ const SignupPage = () => {
                 </p>
               </div>
             </form>
+            {verificationSent && (
+              <div className="text-center mt-4">
+                <p>A verification email has been sent. Please check your email.</p>
+              </div>
+            )}
           </MDBCol>
         </MDBRow>
       </MDBContainer>

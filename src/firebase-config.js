@@ -5,20 +5,18 @@ import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database";   
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBrgYKHrqEW29DwqK5UVcRktrZe3OFxpFk",
-  authDomain: "e-conges.firebaseapp.com",
-  projectId: "e-conges",
-  databaseURL: "https://e-conges-default-rtdb.firebaseio.com/",  
-  storageBucket: "e-conges.appspot.com",
-  messagingSenderId: "201935697599",
-  appId: "1:201935697599:web:6787b44ed48675873db80a",
-  measurementId: "G-FSGEMGNRDB"
+  apiKey: "AIzaSyBVsTTc53OT4TqK-Pez6QneYCT_KzOH-rY",
+  authDomain: "econges-9e1c2.firebaseapp.com",
+  projectId: "econges-9e1c2",
+  storageBucket: "econges-9e1c2.appspot.com",
+  messagingSenderId: "145024754425",
+  appId: "1:145024754425:web:98cf607b177742f0f57828",
+  measurementId: "G-J84P8M3GHB"
 };
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);  
 const db = getFirestore(app);   
-const realtimeDb = getDatabase(app);   
 
-export { auth, db, realtimeDb };
+export { auth, db };

@@ -7,6 +7,7 @@ import LoginPage from './pages/login';
 import SignupPage from './pages/signup';
 import Dashboard from './pages/Dashboard';
 import LeaveRequestForm from './pages/Leave-req-form'; 
+import ForgetPassword from './pages/Forgot';
 import './App.css';
 
 const Layout = ({ children }) => {
@@ -30,6 +31,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/forgot" element={<ForgetPassword />} />
+
         <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
         <Route path="/leaveform" element={<Layout><LeaveRequestForm /></Layout>} />
       </Routes>

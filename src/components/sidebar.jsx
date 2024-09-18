@@ -23,9 +23,9 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
-          <Link to="#about">
+          <Link to="/leaveform">
             <FaInfoCircle className={styles.icon} />
-            {!isCollapsed && <span className={styles.label}>About</span>}
+            {!isCollapsed && <span className={styles.label}>Leave Form</span>}
           </Link>
         </li>
         <li>
