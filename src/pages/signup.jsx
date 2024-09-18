@@ -31,10 +31,7 @@ const SignupPage = () => {
       return;
     }
 
-    if (!role) {
-      toast.error('Please select a role.');
-      return;
-    }
+   
 
     try {
       setLoading(true);
@@ -45,7 +42,7 @@ const SignupPage = () => {
       await setDoc(doc(db, "Users", user.uid), {
         email: user.email,
         fullName: fullName,
-        role: role
+        role: "CEO"
       });
 
       await sendEmailVerification(user);
@@ -119,18 +116,7 @@ const SignupPage = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              <select 
-                className="form-select mb-4"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option value="">Select Role</option>
-                <option value="Employee">Employee</option>
-                <option value="Department Head">Department Head</option>
-                <option value="HR Manager">HR Manager</option>
-                <option value="CEO">CEO</option>
-                <option value="Store">Store</option>
-              </select>
+          
               <div className="d-flex justify-content-between mb-4">
                 <MDBCheckbox
                   name='terms'
@@ -141,7 +127,7 @@ const SignupPage = () => {
                 />
               </div>
               <div className='text-center text-md-start mt-4 pt-2'>
-                <button type="submit" className="mb-0 px-5" size='lg' disabled={loading || verificationSent}>
+                <button type="submit" className={styles.btn} size='lg' disabled={loading || verificationSent}>
                   {loading ? 'Signing Up...' : 'Sign Up'}
                 </button>
                 <p className="small fw-bold mt-2 pt-1 mb-2">

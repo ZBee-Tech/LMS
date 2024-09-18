@@ -25,17 +25,7 @@ const Header = () => {
           loading="lazy"
         />
       </a>
-       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Team</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Projects</a>
-        </li>
-      </ul>
+ 
      </div>
  
      <div class="d-flex align-items-center">

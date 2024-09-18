@@ -19,4 +19,13 @@
     width: 100%;
     max-width: 300px;
   }
-  
+  .btn{
+    width:20%;
+    border: none;
+    background: #0e5db8;
+    border-radius: 5px;
+    padding: 2px;
+    color: seashell;
+
+
+  }

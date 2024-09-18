@@ -1,0 +1,62 @@
+.container {
+    padding: 20px;
+  }
+  
+  .heading {
+    margin-bottom: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th, .table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .status {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  
+  .status.approved {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .status.declined {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .status.pending {
+    background-color: #ffc107;
+    color: white;
+  }
+  
+  .approveButton {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .declineButton {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .approveButton:hover, .declineButton:hover {
+    opacity: 0.9;
+  }
+  

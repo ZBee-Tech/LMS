@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { MDBContainer, MDBCol, MDBRow, MDBBtn, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBCol, MDBRow, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from '../assets/CSS/LoginPage.module.css';
@@ -16,26 +16,28 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
+    
     try {
-      setLoading(true);
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Check if the email is verified
-      if (!user.emailVerified) {
+       if (!user.emailVerified) {
         toast.error('Please verify your email address before logging in.');
         return;
       }
 
-      // Fetch user data from Firestore
-      const userDoc = await getDoc(doc(db, "Users", user.uid));
+       const userDoc = await getDoc(doc(db, "Users", user.uid));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        const { role } = userData;
+        const { role, fullName } = userData;
 
-        navigate(`/dashboard`, { state: { role: role, userId: user.uid } });
+         localStorage.setItem('role', role);
+        localStorage.setItem('userId', user.uid);
+        localStorage.setItem('fullName', fullName);
+
         toast.success('Login successful!');
+        navigate(`/dashboard`);
       } else {
         toast.error('User not found.');
       }
@@ -49,7 +51,7 @@ const LoginPage = () => {
 
   return (
     <>
-      <MDBContainer fluid className="p-3 my-5 h-100 d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+      <MDBContainer fluid className="p-3 my-5 h-100 d-flex justify-content-center align-items-center">
         <MDBRow className="d-flex justify-content-center align-items-center w-100">
           <MDBCol col='10' md='6'>
             <img
@@ -83,15 +85,16 @@ const LoginPage = () => {
                 disabled={loading}
               />
               <div className="d-flex justify-content-between mb-4">
-                <MDBCheckbox
-                  name='rememberMe'
-                  id='rememberMe'
-                  label='Remember me'
-                />
+                <MDBCheckbox name='rememberMe' id='rememberMe' label='Remember me' />
                 <Link to="/forgot" className="link-danger">Forgot password?</Link>
-               </div>
+              </div>
               <div className='text-center text-md-start mt-4 pt-2'>
-                <button className="mb-0 px-5" size='lg' type="submit" disabled={loading}>
+                <button 
+                  className={`${styles.loginButton} mb-0 px-5`} 
+                  size='lg' 
+                  type="submit" 
+                  disabled={loading}
+                >
                   {loading ? 'Logging In...' : 'Login'}
                 </button>
                 <p className="small fw-bold mt-2 pt-1 mb-2">

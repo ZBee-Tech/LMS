@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHome, FaInfoCircle, FaBars, FaEnvelope } from 'react-icons/fa'; // Import icons
 import styles from '../assets/CSS/sidebar.module.css'; 
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+     const savedRole = localStorage.getItem('role');
+    if (savedRole) {
+      setUserRole(savedRole);
+    }
+  }, []);
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -22,12 +30,31 @@ const Sidebar = () => {
             {!isCollapsed && <span className={styles.label}>Home</span>}
           </Link>
         </li>
-        <li>
-          <Link to="/leaveform">
-            <FaInfoCircle className={styles.icon} />
-            {!isCollapsed && <span className={styles.label}>Leave Form</span>}
-          </Link>
-        </li>
+        
+         {userRole !== 'CEO' && (
+          <li>
+            <Link to="/leaveform">
+              <FaInfoCircle className={styles.icon} />
+              {!isCollapsed && <span className={styles.label}>Leave Form</span>}
+            </Link>
+          </li>
+        )}
+        {userRole === 'CEO' ? (
+  <li>
+    <Link to="/addusers">
+      <FaInfoCircle className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>Add Users</span>}
+    </Link>
+  </li>
+) : (
+  <li>
+    <Link to="/leaveform">
+      <FaInfoCircle className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>Leave Form</span>}
+    </Link>
+  </li>
+)}
+
         <li>
           <Link to="#contact">
             <FaEnvelope className={styles.icon} />
