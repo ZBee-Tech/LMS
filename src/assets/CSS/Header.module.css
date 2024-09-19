@@ -80,3 +80,9 @@
 .prof:hover {
   border-color: #007bff;
 }
+.userRole{
+  font-size:  x-small;
+}
+.userName{
+  font-weight: bold ;
+}

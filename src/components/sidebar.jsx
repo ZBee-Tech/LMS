@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaInfoCircle, FaBars, FaEnvelope } from 'react-icons/fa'; // Import icons
+import { FaHome, FaInfoCircle, FaBars, FaEnvelope } from 'react-icons/fa';  
 import styles from '../assets/CSS/sidebar.module.css'; 
 
 const Sidebar = () => {
@@ -47,6 +47,50 @@ const Sidebar = () => {
 ) : (
 <></>
 )
+
+
+}
+    
+{userRole === 'Employee' ? (
+          <>
+  <li>
+    <Link to="/leaveform">
+      <FaInfoCircle className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>LeaveForm</span>}
+    </Link>
+    
+  </li>
+  <li>
+    <Link to="/leaveoverview">
+      <FaEnvelope className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>Leave Requests </span>}
+    </Link>
+    
+  </li>
+  </>
+) : (
+<></>
+)
+
+
+}
+
+{userRole === 'HOD' ? (
+          <>
+  <li>
+    <Link to="/leavesDataHOD">
+      <FaInfoCircle className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>Leave Requests</span>}
+    </Link>
+    
+  </li>
+ 
+  </>
+) : (
+<></>
+)
+
+
 }
 {userRole === 'HR Manager' ? (
           <>
@@ -84,12 +128,7 @@ const Sidebar = () => {
 )
 }
 
-        <li>
-          <Link to="#contact">
-            <FaEnvelope className={styles.icon} />
-            {!isCollapsed && <span className={styles.label}>Contact</span>}
-          </Link>
-        </li>
+  
       </ul>
     </aside>
   );

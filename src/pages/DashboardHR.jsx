@@ -88,8 +88,8 @@ const HomeHR = () => {
             <th>Name</th>
             <th>Role</th>
             <th>HOD/Department</th>
-            {userRole === 'HR Manager' && <th>Leave Limit</th>}
-            {userRole === 'HR Manager' && <th>Actions</th>}
+             <th>Leave Limit</th>
+             <th>Actions</th>
           </tr>
         </thead>
         <tbody>

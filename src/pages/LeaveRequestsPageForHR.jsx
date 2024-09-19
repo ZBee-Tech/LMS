@@ -19,7 +19,8 @@ const LeaveRequestsPageForHR = () => {
         const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
         const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
-         const hrRequests = leaveRequestData.filter(request => request.HodStatus === 1);
+        // Filter requests where HOD has approved
+        const hrRequests = leaveRequestData.filter(request => request.HodStatus === 1);
         setLeaveRequests(hrRequests);
       } catch (error) {
         console.error('Error fetching leave requests:', error);
@@ -79,6 +80,24 @@ const LeaveRequestsPageForHR = () => {
     }
   };
 
+  const getCEOApprovalStatus = (CeoStatus) => {
+    switch (CeoStatus) {
+      case 1:
+        return <span className={`${styles.status} ${styles.approved}`}>Approved by CEO</span>;
+      case -1:
+        return <span className={`${styles.status} ${styles.declined}`}>Declined by CEO</span>;
+      default:
+        return <span className={`${styles.status} ${styles.pending}`}>Pending</span>;
+    }
+  };
+
+  const calculateLeaveDays = (startDate, endDate) => {
+    const start = new Date(startDate.seconds * 1000);
+    const end = new Date(endDate.seconds * 1000);
+    const diffTime = Math.abs(end - start);
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include the end date
+  };
+
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Leave Requests for HR</h2>
@@ -88,9 +107,11 @@ const LeaveRequestsPageForHR = () => {
             <th>Leave Type</th>
             <th>Start Date</th>
             <th>End Date</th>
+            <th>Days</th>
             <th>Reason</th>
             <th>Requested By</th>
             <th>HOD Approved</th>
+            <th>CEO Approved</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -101,9 +122,11 @@ const LeaveRequestsPageForHR = () => {
               <td>{request.leaveType}</td>
               <td>{new Date(request.startDate.seconds * 1000).toLocaleDateString()}</td>
               <td>{new Date(request.endDate.seconds * 1000).toLocaleDateString()}</td>
+              <td>{calculateLeaveDays(request.startDate, request.endDate)}</td>
               <td>{request.reason || 'N/A'}</td>
               <td>{request.fullName}</td>
               <td>{request.HodStatus === 1 ? 'Yes' : 'No'}</td>
+              <td>{getCEOApprovalStatus(request.CeoStatus)}</td>
               <td>{getStatusLabel(request.HrStatus)}</td>
               <td>
                 {request.HrStatus === 0 && (   

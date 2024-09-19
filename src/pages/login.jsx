@@ -46,8 +46,24 @@ const LoginPage = () => {
         localStorage.setItem('fullName', fullName);
 
         toast.success('Login successful!');
-        navigate('/dashboard');
-      } else {
+        if(role ==="Employee"){
+          navigate('/leaveoverview');
+
+        }
+        if(role ==="HR Manager"
+){
+          navigate('/homehr');
+
+        }
+        if(role ==="HOD"){
+          navigate('/leavesDataHOD');
+
+        }
+        if(role ==="CEO"){
+          navigate('/leavesDataCEO');
+
+        }
+       } else {
         toast.error('User not found in Firestore.');
       }
     } catch (err) {
