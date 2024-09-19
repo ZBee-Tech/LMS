@@ -1,101 +1,77 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import styles from '../assets/CSS/Header.module.css';
 
 const Header = () => {
-  return ( 
-  <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary   ">
-   <div class="container-fluid">
-     <button
-      data-mdb-collapse-init
-      class="navbar-toggler"
-      type="button"
-      data-mdb-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <i class="fas fa-bars"></i>
-    </button>
-     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-       <a class="navbar-brand mt-2 mt-lg-0" href="#">
-        <img
-          src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
-          height="15"
-          alt="MDB Logo"
-          loading="lazy"
-        />
-      </a>
- 
-     </div>
- 
-     <div class="d-flex align-items-center">
-       <a class="text-reset me-3" href="#">
-        <i class="fas fa-shopping-cart"></i>
-      </a>
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
 
-       <div class="dropdown">
-        <a
-          data-mdb-dropdown-init
-          class="text-reset me-3 dropdown-toggle hidden-arrow"
-          href="#"
-          id="navbarDropdownMenuLink"
-          role="button"
-          aria-expanded="false"
-        >
-          <i class="fas fa-bell"></i>
-          <span class="badge rounded-pill badge-notification bg-danger">1</span>
-        </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="navbarDropdownMenuLink"
-        >
-          <li>
-            <a class="dropdown-item" href="#">Some news</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Another news</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </li>
-        </ul>
-      </div>
-       <div class="dropdown">
-        <a
-          data-mdb-dropdown-init
-          class="dropdown-toggle d-flex align-items-center hidden-arrow"
-          href="#"
-          id="navbarDropdownMenuAvatar"
-          role="button"
-          aria-expanded="false"
-        >
+  const toggleProfileDropdown = () => {
+    setProfileDropdownOpen(!profileDropdownOpen);
+  };
+
+  const toggleNotificationDropdown = () => {
+    setNotificationDropdownOpen(!notificationDropdownOpen);
+  };
+
+  return (
+    <nav className={styles.navbar}>
+      <div className={styles.navbarBrand}>
+        <Link to="/">
           <img
-            src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-            class="rounded-circle"
-            height="25"
-            alt="Black and White Portrait of a Man"
+            src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
+            alt="MDB Logo"
             loading="lazy"
           />
-        </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="navbarDropdownMenuAvatar"
-        >
-          <li>
-            <a class="dropdown-item" href="#">My profile</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Settings</a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">Logout</a>
-          </li>
-        </ul>
+        </Link>
       </div>
-    </div>
-   </div>
- </nav>
-   );
+
+      <div className="d-flex align-items-center">
+        <Link className={styles.icon} to="#">
+          <i className="fas fa-shopping-cart"></i>
+        </Link>
+
+        <div className={styles.dropdown}>
+          <div
+            className={`${styles.icon}`}
+            onClick={toggleNotificationDropdown}
+          >
+            <i className="fas fa-bell"></i>
+            <span className={styles.badge}>1</span>
+          </div>
+          <div className={`${styles.dropdownMenu} ${notificationDropdownOpen ? styles.open : ''}`}>
+            <div className={styles.dropdownItem}>Some news</div>
+            <div className={styles.dropdownItem}>Another news</div>
+            <div className={styles.dropdownItem}>Something else here</div>
+          </div>
+        </div>
+
+        <div className={styles.dropdown}>
+          <div
+            className={styles.avatar}
+            onClick={toggleProfileDropdown}
+          >
+            <img
+              src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+              alt="User Avatar"
+              loading="lazy"
+            />
+          </div>
+          <div className={`${styles.dropdownMenu} ${profileDropdownOpen ? styles.open : ''}`}>
+            <div className={styles.dropdownItem}>
+              <Link to="#">My profile</Link>
+            </div>
+            <div className={styles.dropdownItem}>
+              <Link to="#">Settings</Link>
+            </div>
+            <div className={styles.dropdownItem}>
+              <Link to="#">Logout</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
 };
 
 export default Header;
