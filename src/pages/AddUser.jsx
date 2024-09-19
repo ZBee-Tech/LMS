@@ -6,12 +6,9 @@ import { auth } from '../firebase-config';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { TextField, MenuItem, Button, Typography, Container, Grid, CircularProgress } from '@mui/material';
-import axios from 'axios';  
-
+import { sendEmail } from '../apis/api';
 const AddUser = () => {
   const [role, setRole] = useState('HR Manager');
-  const [hrManagerId, setHrManagerId] = useState('');
-  const [hodId, setHodId] = useState('');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -24,11 +21,11 @@ const AddUser = () => {
     setLoading(true); 
 
     try {
-       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const userId = userCredential.user.uid;
       const createdAt = Timestamp.now();
 
-       await sendEmailVerification(userCredential.user);
+      await sendEmailVerification(userCredential.user);
 
       const userData = {
         fullName,
@@ -41,18 +38,18 @@ const AddUser = () => {
         modifiedAt: null
       };
 
-       await addDoc(collection(db, 'Users'), { ...userData, userId });
+      await addDoc(collection(db, 'Users'), { ...userData, userId });
 
-       await axios.post('/send-credentials', {
-        email,
-        fullName,
-        username,
-        password
+       await sendEmail({
+        to: email,
+        userEmail: email,
+        password: password,
+        role: role
       });
 
       toast.success('User added successfully! Verification email sent.');
 
-       setFullName('');
+      setFullName('');
       setEmail('');
       setUsername('');
       setPassword('');
@@ -82,32 +79,10 @@ const AddUser = () => {
               variant="outlined"
             >
               <MenuItem value="HR Manager">HR Manager</MenuItem>
+              <MenuItem value="HOD">HOD</MenuItem>
+              <MenuItem value="Employee">Employee</MenuItem>
             </TextField>
           </Grid>
-
-          {role === 'HOD' && (
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="HR Manager ID"
-                value={hrManagerId}
-                onChange={(e) => setHrManagerId(e.target.value)}
-                variant="outlined"
-              />
-            </Grid>
-          )}
-
-          {role === 'Employee' && (
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="HOD ID"
-                value={hodId}
-                onChange={(e) => setHodId(e.target.value)}
-                variant="outlined"
-              />
-            </Grid>
-          )}
 
           <Grid item xs={12}>
             <TextField
