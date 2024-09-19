@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MDBContainer, MDBCol, MDBRow, MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 import { toast, ToastContainer } from 'react-toastify';
@@ -14,16 +14,25 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const role = localStorage.getItem('role');
+    const userId = localStorage.getItem('userId');
+    if (role && userId) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
        if (!user.emailVerified) {
         toast.error('Please verify your email address before logging in.');
+        setLoading(false);
         return;
       }
 
@@ -37,9 +46,9 @@ const LoginPage = () => {
         localStorage.setItem('fullName', fullName);
 
         toast.success('Login successful!');
-        navigate(`/dashboard`);
+        navigate('/dashboard');
       } else {
-        toast.error('User not found.');
+        toast.error('User not found in Firestore.');
       }
     } catch (err) {
       console.error('Error during login:', err);

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
-import { collection, doc, setDoc, Timestamp } from 'firebase/firestore';  
+import { collection, doc, setDoc, Timestamp, query, where, getDocs } from 'firebase/firestore';  
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../firebase-config';
 import { toast, ToastContainer } from 'react-toastify';
@@ -9,27 +9,43 @@ import { TextField, MenuItem, Button, Typography, Container, Grid, CircularProgr
 import { sendEmail } from '../apis/api';
 
 const AddUser = () => {
-  const [role, setRole] = useState('HR Manager');
+  const [role, setRole] = useState('Select Role');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [department, setDepartment] = useState('');
+  const [hods, setHods] = useState([]); // State for HODs
+  const [selectedHod, setSelectedHod] = useState(''); // State for selected HOD
   const [createdBy, setCreatedBy] = useState(localStorage.getItem('userId') || '');
   const [loading, setLoading] = useState(false);
+
+  // Fetch HODs when role changes to Employee
+  useEffect(() => {
+    if (role === 'Employee') {
+      const fetchHods = async () => {
+        const hodsQuery = query(collection(db, 'Users'), where('role', '==', 'HOD'));
+        const querySnapshot = await getDocs(hodsQuery);
+        const hodList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setHods(hodList);
+      };
+      fetchHods();
+    }
+  }, [role]);
 
   const handleAddUser = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       const userId = user.uid; 
       const createdAt = Timestamp.now();
 
-       await sendEmailVerification(user);
+      await sendEmailVerification(user);
 
-       const userData = {
+      const userData = {
         fullName,
         email,
         username,
@@ -37,13 +53,14 @@ const AddUser = () => {
         createdBy,
         createdAt,
         modifiedBy: null,
-        modifiedAt: null
+        modifiedAt: null,
+        department: role === 'HOD' ? department : role === 'Employee' ? selectedHod : null // Include department or selected HOD
       };
 
-       const userRef = doc(db, 'Users', userId);  
+      const userRef = doc(db, 'Users', userId);  
       await setDoc(userRef, userData);  
 
-       await sendEmail({
+      await sendEmail({
         to: email,
         userEmail: email,
         password: password,
@@ -52,11 +69,13 @@ const AddUser = () => {
 
       toast.success('User added successfully! Verification email sent.');
 
-       setFullName('');
+      setFullName('');
       setEmail('');
       setUsername('');
       setPassword('');
-      setRole('HR Manager');
+      setRole('Select Role');
+      setDepartment('');
+      setSelectedHod('');
     } catch (error) {
       console.error('Error adding user:', error);
       toast.error('Failed to add user.');
@@ -81,7 +100,9 @@ const AddUser = () => {
               onChange={(e) => setRole(e.target.value)}
               variant="outlined"
             >
-              <MenuItem value="HR Manager">HR Manager</MenuItem>
+              <MenuItem value="Select Role">Select Role</MenuItem>
+              <MenuItem value="Employee">Employee</MenuItem>
+              <MenuItem value="HOD">HOD</MenuItem>  
             </TextField>
           </Grid>
 
@@ -130,6 +151,39 @@ const AddUser = () => {
               required
             />
           </Grid>
+
+          {role === 'HOD' && (  
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Department"
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+                variant="outlined"
+                required
+              />
+            </Grid>
+          )}
+
+          {role === 'Employee' && (
+            <Grid item xs={12}>
+              <TextField
+                select
+                fullWidth
+                label="Select HOD"
+                value={selectedHod}
+                onChange={(e) => setSelectedHod(e.target.value)}
+                variant="outlined"
+                required
+              >
+                {hods.map(hod => (
+                  <MenuItem key={hod.id} value={hod.id}>
+                    {hod.fullName}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+          )}
 
           <Grid item xs={12}>
             <Button

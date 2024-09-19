@@ -31,29 +31,49 @@ const Sidebar = () => {
           </Link>
         </li>
         
-         {userRole !== 'CEO' && (
-          <li>
-            <Link to="/leaveform">
-              <FaInfoCircle className={styles.icon} />
-              {!isCollapsed && <span className={styles.label}>Leave Form</span>}
-            </Link>
-          </li>
-        )}
+    
         {userRole === 'CEO' ? (
+          <>
   <li>
     <Link to="/addusers">
       <FaInfoCircle className={styles.icon} />
       {!isCollapsed && <span className={styles.label}>Add Users</span>}
     </Link>
+    
   </li>
-) : (
   <li>
-    <Link to="/leaveform">
-      <FaInfoCircle className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>Leave Form</span>}
+    <Link to="/leavesDataCEO">
+      <FaEnvelope className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>Leave Requests </span>}
     </Link>
+    
   </li>
-)}
+  </>
+) : (
+<></>
+)
+}
+{userRole === 'HR Manager' ? (
+          <>
+  <li>
+    <Link to="/addHOD">
+      <FaInfoCircle className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>Add HOD/Employee</span>}
+    </Link>
+    
+  </li>
+  <li>
+    <Link to="/leavesDataHR">
+      <FaEnvelope className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>Leave Requests HR </span>}
+    </Link>
+    
+  </li>
+  </>
+) : (
+  <></>
+)
+}
 
         <li>
           <Link to="#contact">
