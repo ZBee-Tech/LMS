@@ -24,12 +24,7 @@ const Sidebar = () => {
         <FaBars className={styles.icon} />
       </div>
       <ul>
-        <li>
-          <Link to="#home">
-            <FaHome className={styles.icon} />
-            {!isCollapsed && <span className={styles.label}>Home</span>}
-          </Link>
-        </li>
+  
         
     
         {userRole === 'CEO' ? (
@@ -55,6 +50,13 @@ const Sidebar = () => {
 }
 {userRole === 'HR Manager' ? (
           <>
+           <li>
+    <Link to="/HomeHR">
+      <FaHome className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>Home</span>}
+    </Link>
+    
+  </li>
   <li>
     <Link to="/addHOD">
       <FaInfoCircle className={styles.icon} />
@@ -66,6 +68,13 @@ const Sidebar = () => {
     <Link to="/leavesDataHR">
       <FaEnvelope className={styles.icon} />
       {!isCollapsed && <span className={styles.label}>Leave Requests HR </span>}
+    </Link>
+    
+  </li>
+  <li>
+    <Link to="/addleavetype">
+      <FaHome className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>Add Leave Type</span>}
     </Link>
     
   </li>

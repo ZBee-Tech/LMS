@@ -12,12 +12,15 @@ import LeaveRequestsPage from './pages/LeaveReq';
 import ProtectedRoute from './components/ProtectedRoute';  
 import UpdateProfile from './pages/UpdateProfile';   
 import AddHOD from './pages/AddHOD.jsx';   
+import LeaveOverview from './pages/LeaveOverview';   
+  
 
 import './App.css';
 import LeaveRequestsPageForHR from './pages/LeaveRequestsPageForHR';
 import LeaveRequestsPageForCEO from './pages/LeaveRequestsPageForCEO';
 import AddUser from './pages/AddUser';
-
+import AddLeaveType from './pages/LeaveTypeManager.jsx';
+import HomeHR from './pages/DashboardHR.jsx'; 
 const Layout = ({ children }) => {
   return (
     <div className="app-container with-sidebar">
@@ -46,6 +49,9 @@ const App = () => {
           <Route path="/addusers" element={<Layout><AddUser/></Layout>} />
           <Route path="/update-profile" element={<Layout><UpdateProfile /></Layout>} />  
           <Route path="/AddHOD" element={<Layout><AddHOD /></Layout>} />
+          <Route path="/addleavetype" element={<Layout><AddLeaveType /></Layout>} />
+          <Route path="/leaveoverview" element={<Layout><LeaveOverview /></Layout>} />
+          <Route path="/homehr" element={<Layout><HomeHR/></Layout>} />
 
           <Route path="/leaveform" element={<Layout><LeaveRequestForm /></Layout>} />
           <Route path="/leavesDataHOD" element={<Layout><LeaveRequestsPage /></Layout>} />

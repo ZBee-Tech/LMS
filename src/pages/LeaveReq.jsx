@@ -10,7 +10,7 @@ const LeaveRequestsPage = () => {
   const [hodId, setHodId] = useState('');
 
   useEffect(() => {
-    const savedHodId = localStorage.getItem('userId'); // Assuming HOD's ID is stored in local storage
+    const savedHodId = localStorage.getItem('userId');  
     setHodId(savedHodId);
 
     const fetchLeaveRequests = async () => {
@@ -28,12 +28,12 @@ const LeaveRequestsPage = () => {
       const requestDocRef = doc(db, 'leaveRequests', requestId);
       await updateDoc(requestDocRef, {
         ApprovedbyHOD: hodId,
-        Status: 1 // Set Status to 1 for approved
+        HodStatus: 1  // Approved
       });
       toast.success('Leave request approved successfully!');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request => 
-          request.id === requestId ? { ...request, ApprovedbyHOD: hodId, Status: 1 } : request
+          request.id === requestId ? { ...request, ApprovedbyHOD: hodId, HodStatus: 1 } : request
         )
       );
     } catch (error) {
@@ -47,12 +47,12 @@ const LeaveRequestsPage = () => {
       const requestDocRef = doc(db, 'leaveRequests', requestId);
       await updateDoc(requestDocRef, {
         ApprovedbyHOD: hodId,
-        Status: -1 // Set Status to -1 for declined
+        HodStatus: -1  // Declined
       });
       toast.success('Leave request declined successfully!');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request => 
-          request.id === requestId ? { ...request, ApprovedbyHOD: hodId, Status: -1 } : request
+          request.id === requestId ? { ...request, ApprovedbyHOD: hodId, HodStatus: -1 } : request
         )
       );
     } catch (error) {
@@ -61,8 +61,8 @@ const LeaveRequestsPage = () => {
     }
   };
 
-  const getStatusLabel = (status) => {
-    switch (status) {
+  const getHodStatusLabel = (hodStatus) => {
+    switch (hodStatus) {
       case 1:
         return <span className={`${styles.status} ${styles.approved}`}>Approved</span>;
       case -1:
@@ -83,7 +83,7 @@ const LeaveRequestsPage = () => {
             <th>End Date</th>
             <th>Reason</th>
             <th>Requested By</th>
-            <th>Status</th>
+            <th>HOD Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -95,9 +95,9 @@ const LeaveRequestsPage = () => {
               <td>{new Date(request.endDate.seconds * 1000).toLocaleDateString()}</td>
               <td>{request.reason || 'N/A'}</td>
               <td>{request.fullName}</td>
-              <td>{getStatusLabel(request.Status)}</td>
+              <td>{getHodStatusLabel(request.HodStatus)}</td>
               <td>
-                {request.Status === 0 && (
+                {request.HodStatus === 0 && (
                   <>
                     <button 
                       className={styles.approveButton} 

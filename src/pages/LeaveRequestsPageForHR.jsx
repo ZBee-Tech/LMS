@@ -10,15 +10,21 @@ const LeaveRequestsPageForHR = () => {
   const [hrId, setHrId] = useState('');
 
   useEffect(() => {
-    const savedHrId = localStorage.getItem('userId');  
+    const savedHrId = localStorage.getItem('userId');
     setHrId(savedHrId);
 
     const fetchLeaveRequests = async () => {
-      const leaveRequestCollection = collection(db, 'leaveRequests');
-      const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
-      const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      const hrRequests = leaveRequestData.filter(request => request.ApprovedbyHOD);  
-      setLeaveRequests(hrRequests);
+      try {
+        const leaveRequestCollection = collection(db, 'leaveRequests');
+        const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
+        const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+         const hrRequests = leaveRequestData.filter(request => request.HodStatus === 1);
+        setLeaveRequests(hrRequests);
+      } catch (error) {
+        console.error('Error fetching leave requests:', error);
+        toast.error('Failed to fetch leave requests.');
+      }
     };
 
     fetchLeaveRequests();
@@ -29,12 +35,12 @@ const LeaveRequestsPageForHR = () => {
       const requestDocRef = doc(db, 'leaveRequests', requestId);
       await updateDoc(requestDocRef, {
         ApprovedByHR: hrId,
-        Status: 2  
+        HrStatus: 1   
       });
       toast.success('Leave request approved by HR successfully!');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request => 
-          request.id === requestId ? { ...request, ApprovedByHR: hrId, Status: 2 } : request
+          request.id === requestId ? { ...request, ApprovedByHR: hrId, HrStatus: 1 } : request
         )
       );
     } catch (error) {
@@ -48,12 +54,12 @@ const LeaveRequestsPageForHR = () => {
       const requestDocRef = doc(db, 'leaveRequests', requestId);
       await updateDoc(requestDocRef, {
         ApprovedByHR: hrId,
-        Status: -2  
+        HrStatus: -1   
       });
       toast.success('Leave request declined by HR successfully!');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request => 
-          request.id === requestId ? { ...request, ApprovedByHR: hrId, Status: -2 } : request
+          request.id === requestId ? { ...request, ApprovedByHR: hrId, HrStatus: -1 } : request
         )
       );
     } catch (error) {
@@ -62,14 +68,14 @@ const LeaveRequestsPageForHR = () => {
     }
   };
 
-  const getStatusLabel = (status) => {
-    switch (status) {
-      case 2:
+  const getStatusLabel = (HrStatus) => {
+    switch (HrStatus) {
+      case 1:
         return <span className={`${styles.status} ${styles.approved}`}>Approved by HR</span>;
-      case -2:
+      case -1:
         return <span className={`${styles.status} ${styles.declined}`}>Declined by HR</span>;
       default:
-        return <span className={`${styles.status} ${styles.pending}`}>Pending HOD Approval</span>;
+        return <span className={`${styles.status} ${styles.pending}`}>Pending</span>;
     }
   };
 
@@ -84,7 +90,7 @@ const LeaveRequestsPageForHR = () => {
             <th>End Date</th>
             <th>Reason</th>
             <th>Requested By</th>
-            <th>HOD Approved By</th>
+            <th>HOD Approved</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -97,10 +103,10 @@ const LeaveRequestsPageForHR = () => {
               <td>{new Date(request.endDate.seconds * 1000).toLocaleDateString()}</td>
               <td>{request.reason || 'N/A'}</td>
               <td>{request.fullName}</td>
-              <td>{request.ApprovedbyHOD ? 'Yes' : 'No'}</td>
-              <td>{getStatusLabel(request.Status)}</td>
+              <td>{request.HodStatus === 1 ? 'Yes' : 'No'}</td>
+              <td>{getStatusLabel(request.HrStatus)}</td>
               <td>
-                {request.Status === 1 && (
+                {request.HrStatus === 0 && (   
                   <>
                     <button 
                       className={styles.approveButton} 

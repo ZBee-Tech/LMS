@@ -5,31 +5,51 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  
 import styles from '../assets/CSS/LeaveRequestForm.module.css';
 import { db } from '../firebase-config';   
-import { collection, addDoc } from 'firebase/firestore';   
+import { collection, addDoc, getDocs } from 'firebase/firestore';   
 
 const LeaveRequestForm = () => {
   const [leaveType, setLeaveType] = useState('');
+  const [leaveTypes, setLeaveTypes] = useState([]);
   const [startDate, setStartDate] = useState(null);  
   const [endDate, setEndDate] = useState(null);  
   const [reason, setReason] = useState('');
   const [role, setRole] = useState('');
   const [userId, setUserId] = useState('');
-  const [fullName, setFullName] = useState('');  // New state for username
+  const [fullName, setFullName] = useState('');
 
   const today = new Date();
 
   useEffect(() => {
     const savedRole = localStorage.getItem('role');
     const savedUserId = localStorage.getItem('userId');
-    const savedFullName = localStorage.getItem('fullName');  // Retrieve username
+    const savedFullName = localStorage.getItem('fullName');
     
     if (savedRole && savedUserId && savedFullName) {
       setRole(savedRole);
       setUserId(savedUserId);
-      setFullName(savedFullName);  // Set username state
+      setFullName(savedFullName);
     } else {
       toast.error('Login data not found. Please log in again.');
     }
+  }, []);
+
+  useEffect(() => {
+    const fetchLeaveTypes = async () => {
+      try {
+        const leaveTypesCollection = collection(db, 'LeaveTypes');
+        const leaveTypesSnapshot = await getDocs(leaveTypesCollection);
+        const leaveTypesList = leaveTypesSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setLeaveTypes(leaveTypesList);
+      } catch (error) {
+        console.error('Error fetching leave types:', error);
+        toast.error('Failed to fetch leave types.');
+      }
+    };
+
+    fetchLeaveTypes();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -54,8 +74,8 @@ const LeaveRequestForm = () => {
     const createdAt = new Date();   
     const modifiedAt = new Date();  
     const createdBy = userId;       
-    const modifiedBy = userId; 
-  
+    const modifiedBy = userId;
+   
     const leaveRequestData = {
       leaveType,
       startDate,
@@ -69,9 +89,9 @@ const LeaveRequestForm = () => {
       modifiedAt,
       modifiedBy,
       Status: 0,   
-      ApprovedbyHOD: null,
-      ApprovedbyHR:null,
-      ApprovedByCEO:null   
+      HodStatus: 0, // Initial status set to 0
+      HrStatus: 0,  // Initial status set to 0
+      CeoStatus: 0, // Initial status set to 0
     };
   
     try {
@@ -96,9 +116,9 @@ const LeaveRequestForm = () => {
               onChange={(e) => setLeaveType(e.target.value)}
             >
               <option value="">Select type of leave</option>
-              <option value="annual">Annual Leave</option>
-              <option value="sick">Sick Leave</option>
-              <option value="personal">Personal Leave</option>
+              {leaveTypes.map(({ id, leaveType }) => (
+                <option key={id} value={leaveType}>{leaveType}</option>
+              ))}
             </select>
           </div>
 

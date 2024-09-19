@@ -14,11 +14,17 @@ const LeaveRequestsPageForCEO = () => {
     setCeoId(savedCeoId);
 
     const fetchLeaveRequests = async () => {
-      const leaveRequestCollection = collection(db, 'leaveRequests');
-      const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
-      const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-       const ceoRequests = leaveRequestData.filter(request => request.ApprovedbyHOD && request.ApprovedByHR);
-      setLeaveRequests(ceoRequests);
+      try {
+        const leaveRequestCollection = collection(db, 'leaveRequests');
+        const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
+        const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+         const ceoRequests = leaveRequestData.filter(request => request.HodStatus === 1 && request.HrStatus === 1);
+        setLeaveRequests(ceoRequests);
+      } catch (error) {
+        console.error('Error fetching leave requests:', error);
+        toast.error('Failed to fetch leave requests.');
+      }
     };
 
     fetchLeaveRequests();
@@ -29,12 +35,13 @@ const LeaveRequestsPageForCEO = () => {
       const requestDocRef = doc(db, 'leaveRequests', requestId);
       await updateDoc(requestDocRef, {
         ApprovedByCEO: ceoId,
-        Status: 3  
+        CeoStatus: 1,   
+        Status: 1        
       });
       toast.success('Leave request approved by CEO successfully!');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request =>
-          request.id === requestId ? { ...request, ApprovedByCEO: ceoId, Status: 3 } : request
+          request.id === requestId ? { ...request, ApprovedByCEO: ceoId, CeoStatus: 1, Status: 1 } : request
         )
       );
     } catch (error) {
@@ -48,12 +55,13 @@ const LeaveRequestsPageForCEO = () => {
       const requestDocRef = doc(db, 'leaveRequests', requestId);
       await updateDoc(requestDocRef, {
         ApprovedByCEO: ceoId,
-        Status: -3  
+        CeoStatus: -1,  
+        Status: -1      
       });
       toast.success('Leave request rejected by CEO successfully!');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request =>
-          request.id === requestId ? { ...request, ApprovedByCEO: ceoId, Status: -3 } : request
+          request.id === requestId ? { ...request, ApprovedByCEO: ceoId, CeoStatus: -1, Status: -1 } : request
         )
       );
     } catch (error) {
@@ -64,9 +72,9 @@ const LeaveRequestsPageForCEO = () => {
 
   const getStatusLabel = (status) => {
     switch (status) {
-      case 3:
+      case 1:
         return <span className={`${styles.status} ${styles.approved}`}>Approved by CEO</span>;
-      case -3:
+      case -1:
         return <span className={`${styles.status} ${styles.declined}`}>Rejected by CEO</span>;
       default:
         return <span className={`${styles.status} ${styles.pending}`}>Pending CEO Approval</span>;
@@ -84,8 +92,8 @@ const LeaveRequestsPageForCEO = () => {
             <th>End Date</th>
             <th>Reason</th>
             <th>Requested By</th>
-            <th>HOD Approved By</th>
-            <th>HR Approved By</th>
+            <th>HOD Approved</th>
+            <th>HR Approved</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -98,11 +106,11 @@ const LeaveRequestsPageForCEO = () => {
               <td>{new Date(request.endDate.seconds * 1000).toLocaleDateString()}</td>
               <td>{request.reason || 'N/A'}</td>
               <td>{request.fullName}</td>
-              <td>{request.ApprovedbyHOD ? 'Yes' : 'No'}</td>
-              <td>{request.ApprovedByHR ? 'Yes' : 'No'}</td>
+              <td>{request.HodStatus === 1 ? 'Yes' : 'No'}</td>
+              <td>{request.HrStatus === 1 ? 'Yes' : 'No'}</td>
               <td>{getStatusLabel(request.Status)}</td>
               <td>
-                {request.Status === 2 && (
+                {request.CeoStatus === 0 && (
                   <>
                     <button 
                       className={styles.approveButton} 

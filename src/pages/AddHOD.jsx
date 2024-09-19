@@ -15,12 +15,11 @@ const AddUser = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [department, setDepartment] = useState('');
-  const [hods, setHods] = useState([]); // State for HODs
-  const [selectedHod, setSelectedHod] = useState(''); // State for selected HOD
+  const [hods, setHods] = useState([]);  
+  const [selectedHod, setSelectedHod] = useState('');  
   const [createdBy, setCreatedBy] = useState(localStorage.getItem('userId') || '');
   const [loading, setLoading] = useState(false);
 
-  // Fetch HODs when role changes to Employee
   useEffect(() => {
     if (role === 'Employee') {
       const fetchHods = async () => {
@@ -36,15 +35,24 @@ const AddUser = () => {
   const handleAddUser = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       const userId = user.uid; 
       const createdAt = Timestamp.now();
-
+  
       await sendEmailVerification(user);
-
+  
+       let hodName = '';
+  
+       if (role === 'Employee') {
+        const selectedHodDoc = hods.find(hod => hod.id === selectedHod);
+        hodName = selectedHodDoc ? selectedHodDoc.fullName : 'Unknown HOD';
+      } else if (role === 'HOD') {
+         hodName = null; 
+      }
+  
       const userData = {
         fullName,
         email,
@@ -54,21 +62,21 @@ const AddUser = () => {
         createdAt,
         modifiedBy: null,
         modifiedAt: null,
-        department: role === 'HOD' ? department : role === 'Employee' ? selectedHod : null // Include department or selected HOD
+        hodName  
       };
-
+  
       const userRef = doc(db, 'Users', userId);  
       await setDoc(userRef, userData);  
-
+  
       await sendEmail({
         to: email,
         userEmail: email,
         password: password,
         role: role
       });
-
+  
       toast.success('User added successfully! Verification email sent.');
-
+  
       setFullName('');
       setEmail('');
       setUsername('');
@@ -83,6 +91,9 @@ const AddUser = () => {
       setLoading(false);
     }
   };
+  
+  
+  
 
   return (
     <Container component="main" maxWidth="xs">
