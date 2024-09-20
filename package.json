@@ -24,6 +24,7 @@
     "firebase": "^10.13.1",
     "mdb-react-ui-kit": "^9.0.0",
     "react": "^18.3.1",
+    "react-csv": "^2.2.2",
     "react-datepicker": "^7.3.0",
     "react-day-picker": "^9.1.0",
     "react-dom": "^18.3.1",
