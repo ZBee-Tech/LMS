@@ -29,13 +29,22 @@ const Sidebar = () => {
     
         {userRole === 'CEO' ? (
           <>
+
+<li>
+    <Link to="/ceohome">
+      <FaInfoCircle className={styles.icon} />
+      {!isCollapsed && <span className={styles.label}>Home</span>}
+    </Link>
+    
+  </li>
   <li>
     <Link to="/addusers">
-      <FaInfoCircle className={styles.icon} />
+      <FaHome className={styles.icon} />
       {!isCollapsed && <span className={styles.label}>Add Users</span>}
     </Link>
     
   </li>
+
   <li>
     <Link to="/leavesDataCEO">
       <FaEnvelope className={styles.icon} />

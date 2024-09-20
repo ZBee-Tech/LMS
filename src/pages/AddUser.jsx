@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
 import { collection, doc, setDoc, Timestamp } from 'firebase/firestore';  
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
@@ -16,20 +16,31 @@ const AddUser = () => {
   const [password, setPassword] = useState('');
   const [createdBy, setCreatedBy] = useState(localStorage.getItem('userId') || '');
   const [loading, setLoading] = useState(false);
+  const [UID, setUID] = useState('');
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUID(storedUserId);
+      console.log('User Role from Local Storage:', storedUserId);
+    } else {
+      setUID('');
+    }
+  }, []);
 
   const handleAddUser = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       const userId = user.uid; 
       const createdAt = Timestamp.now();
 
-       await sendEmailVerification(user);
+      await sendEmailVerification(user);
 
-       const userData = {
+      const userData = {
         fullName,
         email,
         username,
@@ -37,13 +48,14 @@ const AddUser = () => {
         createdBy,
         createdAt,
         modifiedBy: null,
-        modifiedAt: null
+        modifiedAt: null,
+        organizationId: UID
       };
 
-       const userRef = doc(db, 'Users', userId);  
+      const userRef = doc(db, 'Users', userId);  
       await setDoc(userRef, userData);  
 
-       await sendEmail({
+      await sendEmail({
         to: email,
         userEmail: email,
         password: password,
@@ -52,7 +64,7 @@ const AddUser = () => {
 
       toast.success('User added successfully! Verification email sent.');
 
-       setFullName('');
+      setFullName('');
       setEmail('');
       setUsername('');
       setPassword('');
@@ -82,6 +94,7 @@ const AddUser = () => {
               variant="outlined"
             >
               <MenuItem value="HR Manager">HR Manager</MenuItem>
+              {/* Add more roles here as needed */}
             </TextField>
           </Grid>
 

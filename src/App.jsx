@@ -21,6 +21,7 @@ import LeaveRequestsPageForCEO from './pages/LeaveRequestsPageForCEO';
 import AddUser from './pages/AddUser';
 import AddLeaveType from './pages/LeaveTypeManager.jsx';
 import HomeHR from './pages/DashboardHR.jsx'; 
+import CEODashboard from './pages/CEODashboard.jsx';
 const Layout = ({ children }) => {
   return (
     <div className="app-container with-sidebar">
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="/addleavetype" element={<Layout><AddLeaveType /></Layout>} />
           <Route path="/leaveoverview" element={<Layout><LeaveOverview /></Layout>} />
           <Route path="/homehr" element={<Layout><HomeHR/></Layout>} />
+          <Route path="/ceohome" element={<Layout><CEODashboard/></Layout>} />
 
           <Route path="/leaveform" element={<Layout><LeaveRequestForm /></Layout>} />
           <Route path="/leavesDataHOD" element={<Layout><LeaveRequestsPage /></Layout>} />

@@ -1,0 +1,66 @@
+.dashboardContainer {
+    margin-top: 30px;
+    padding: 20px;
+  }
+  
+  .userTable {
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+  }
+  
+  .actionButton {
+    margin-right: 10px;
+  }
+  
+  .modalBackdrop {
+    backdrop-filter: blur(5px); /* Adds blur to the background */
+  }
+  
+  .modalBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    outline: none;
+    text-align: center;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  
+  .modalTitle {
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .inputField {
+    margin-bottom: 20px;
+  }
+  
+  .saveButton {
+    background-color: #4caf50;
+    color: #fff;
+    margin-right: 10px;
+  }
+  
+  .cancelButton {
+    background-color: #f44336;
+    color: #fff;
+  }
+  
