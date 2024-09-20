@@ -8,6 +8,7 @@ import styles from '../assets/CSS/LeaveRequestsPageForCEO.module.css';
 const LeaveRequestsPageForCEO = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [ceoId, setCeoId] = useState('');
+  const organizationId = localStorage.getItem('organizationId');  
 
   useEffect(() => {
     const savedCeoId = localStorage.getItem('userId');  
@@ -19,7 +20,7 @@ const LeaveRequestsPageForCEO = () => {
         const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
         const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
-         const ceoRequests = leaveRequestData.filter(request => request.HodStatus === 1 && request.HrStatus === 1);
+         const ceoRequests = leaveRequestData.filter(request => request.HodStatus === 1 && request.HrStatus === 1  && request.organizationID === ceoId);
         setLeaveRequests(ceoRequests);
       } catch (error) {
         console.error('Error fetching leave requests:', error);

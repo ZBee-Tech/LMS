@@ -10,9 +10,13 @@ const Header = () => {
   const queryClient = useQueryClient();  
   const navigate = useNavigate();  
 
-  // Retrieve user info from local storage
   const userName = localStorage.getItem('fullName') || 'User';
   const userRole = localStorage.getItem('role') || 'Role';
+  const approvedLeaveCount = parseInt(localStorage.getItem('approvedLeaveCount')) || 0;
+
+  const notifications = [
+    "Your leave was approved! ✅",
+   ];
 
   const toggleProfileDropdown = () => {
     setProfileDropdownOpen(!profileDropdownOpen);
@@ -20,6 +24,9 @@ const Header = () => {
 
   const toggleNotificationDropdown = () => {
     setNotificationDropdownOpen(!notificationDropdownOpen);
+    if (approvedLeaveCount > 0) {
+      localStorage.setItem('approvedLeaveCount', 0);
+    }
   };
 
   const handleLogout = () => {
@@ -43,6 +50,27 @@ const Header = () => {
       </div>
 
       <div className="d-flex align-items-center">
+        <div className={styles.notification} onClick={toggleNotificationDropdown}>
+          <i className="fas fa-bell"></i>
+          {approvedLeaveCount > 0 && (
+            <span className={styles.notificationCount}>{approvedLeaveCount}</span>
+          )}
+        </div>
+
+        {notificationDropdownOpen && (
+          <div className={styles.notificationDropdown}>
+            {notifications.length > 0 ? (
+              notifications.map((msg, index) => (
+                <div key={index} className={styles.notificationItem}>
+                  {msg}
+                </div>
+              ))
+            ) : (
+              <div className={styles.notificationItem}>No new notifications.</div>
+            )}
+          </div>
+        )}
+
         <div className={styles.dropdown}>
           <div className={styles.avatar} onClick={toggleProfileDropdown}>
             <img
@@ -54,8 +82,9 @@ const Header = () => {
           </div>
           <div className={`${styles.dropdownMenu} ${profileDropdownOpen ? styles.open : ''}`}>
             <div className={styles.dropdownItem}>
-              <span className={styles.userName}>{userName}  <span className={styles.userRole}>({userRole})  </span></span>
-          
+              <span className={styles.userName}>
+                {userName} <span className={styles.userRole}>({userRole})</span>
+              </span>
             </div>
             <div className={styles.dropdownItem}>
               <Link to="/update-profile">My profile</Link>

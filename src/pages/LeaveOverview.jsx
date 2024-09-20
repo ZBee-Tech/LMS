@@ -10,7 +10,6 @@ const LeaveTrackingForm = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Save and retrieve userId from local storage
   useEffect(() => {
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
@@ -24,15 +23,14 @@ const LeaveTrackingForm = () => {
     }
   }, []);
 
-   useEffect(() => {
+  useEffect(() => {
     if (userId) {
       fetchLeaveRequests();
     }
   }, [userId]);
 
-   const fetchLeaveRequests = async () => {
+  const fetchLeaveRequests = async () => {
     console.log('Fetching leave requests for user ID:', userId);
-
     setLoading(true);
     try {
       const leaveRequestCollection = collection(db, 'leaveRequests');
@@ -43,6 +41,14 @@ const LeaveTrackingForm = () => {
       console.log('Filtered leave requests:', filteredRequests);
       
       setLeaveRequests(filteredRequests);
+
+       const approvedRequests = filteredRequests.filter(request => request.CeoStatus === 1);
+      if (approvedRequests.length > 0) {
+        const currentCount = parseInt(localStorage.getItem('approvedLeaveCount')) || 0;
+        localStorage.setItem('approvedLeaveCount', currentCount + 1);
+        console.log('Incremented approved leave count:', currentCount + 1);
+      }
+
     } catch (error) {
       console.error('Error fetching leave requests:', error);
       toast.error('Failed to fetch leave requests.');
@@ -50,7 +56,7 @@ const LeaveTrackingForm = () => {
     setLoading(false);
   };
 
-   const generateUserId = () => {
+  const generateUserId = () => {
     return `user-${Math.floor(Math.random() * 10000)}`;
   };
 
@@ -66,12 +72,12 @@ const LeaveTrackingForm = () => {
     return 'Unknown Status';
   };
   
-
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Track Leave Requests</h2>
       <div className={styles.userIdDisplay}>
-       </div>
+        User ID: {userId}
+      </div>
       <table className={styles.table}>
         <thead>
           <tr>

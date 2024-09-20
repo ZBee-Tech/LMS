@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '../firebase-config';
-import { collection, doc, setDoc, Timestamp, query, where, getDocs } from 'firebase/firestore';  
+import { db, auth } from '../firebase-config';
+import { collection, doc, setDoc, Timestamp, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { auth } from '../firebase-config';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { TextField, MenuItem, Button, Typography, Container, Grid, CircularProgress } from '@mui/material';
@@ -15,44 +14,68 @@ const AddUser = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [department, setDepartment] = useState('');
-  const [hods, setHods] = useState([]);  
-  const [selectedHod, setSelectedHod] = useState('');  
+  const [hods, setHods] = useState([]);
+  const [selectedHod, setSelectedHod] = useState('');
   const [createdBy, setCreatedBy] = useState(localStorage.getItem('userId') || '');
+  const [organizationId, setOrganizationId] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchOrganizationId = async () => {
+      if (createdBy) {
+        try {
+          const userDoc = await getDoc(doc(db, 'Users', createdBy));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const orgId = userData.organizationId || '';
+            setOrganizationId(orgId);
+          } else {
+            console.log('No such document!');
+          }
+        } catch (error) {
+          console.error('Error fetching organization ID:', error);
+        }
+      }
+    };
+    fetchOrganizationId();
+  }, [createdBy]);
 
   useEffect(() => {
     if (role === 'Employee') {
       const fetchHods = async () => {
-        const hodsQuery = query(collection(db, 'Users'), where('role', '==', 'HOD'));
-        const querySnapshot = await getDocs(hodsQuery);
-        const hodList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setHods(hodList);
+        try {
+          const hodsQuery = query(collection(db, 'Users'), where('role', '==', 'HOD'), where('organizationId', '==', organizationId));
+          const querySnapshot = await getDocs(hodsQuery);
+          const hodList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setHods(hodList);
+        } catch (error) {
+          console.error('Error fetching HODs:', error);
+        }
       };
-      fetchHods();
+      if (organizationId) {
+        fetchHods();
+      }
     }
-  }, [role]);
+  }, [role, organizationId]);
 
   const handleAddUser = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      const userId = user.uid; 
+      const userId = user.uid;
       const createdAt = Timestamp.now();
-  
+
       await sendEmailVerification(user);
-  
-       let hodName = '';
-  
-       if (role === 'Employee') {
+
+      let hodName = null;  
+      if (role === 'Employee') {
         const selectedHodDoc = hods.find(hod => hod.id === selectedHod);
         hodName = selectedHodDoc ? selectedHodDoc.fullName : 'Unknown HOD';
-      } else if (role === 'HOD') {
-         hodName = null; 
       }
-  
+
       const userData = {
         fullName,
         email,
@@ -62,21 +85,24 @@ const AddUser = () => {
         createdAt,
         modifiedBy: null,
         modifiedAt: null,
-        hodName  
+        hodName,
+        organizationId,
+        department
       };
-  
-      const userRef = doc(db, 'Users', userId);  
-      await setDoc(userRef, userData);  
-  
+
+      const userRef = doc(db, 'Users', userId);
+      await setDoc(userRef, userData);
+
       await sendEmail({
         to: email,
         userEmail: email,
         password: password,
         role: role
       });
-  
+
       toast.success('User added successfully! Verification email sent.');
-  
+
+      // Reset form fields
       setFullName('');
       setEmail('');
       setUsername('');
@@ -91,9 +117,6 @@ const AddUser = () => {
       setLoading(false);
     }
   };
-  
-  
-  
 
   return (
     <Container component="main" maxWidth="xs">
@@ -113,7 +136,7 @@ const AddUser = () => {
             >
               <MenuItem value="Select Role">Select Role</MenuItem>
               <MenuItem value="Employee">Employee</MenuItem>
-              <MenuItem value="HOD">HOD</MenuItem>  
+              <MenuItem value="HOD">HOD</MenuItem>
             </TextField>
           </Grid>
 
@@ -163,7 +186,7 @@ const AddUser = () => {
             />
           </Grid>
 
-          {role === 'HOD' && (  
+          {role === 'HOD' && (
             <Grid item xs={12}>
               <TextField
                 fullWidth

@@ -20,6 +20,7 @@ const LeaveRequestForm = () => {
   const [allUsersLeaveLimits, setAllUsersLeaveLimits] = useState([]);
   const [daysRequested, setDaysRequested] = useState(0);  
   const [Check, setCheck] = useState('');
+  const [organizationID, setorganizationid] = useState('');
 
   const today = new Date();
   const nextDay = new Date(today);
@@ -29,11 +30,14 @@ const LeaveRequestForm = () => {
     const savedRole = localStorage.getItem('role');
     const savedUserId = localStorage.getItem('userId');
     const savedFullName = localStorage.getItem('fullName');
+    const organizationid = localStorage.getItem('organizationId');
+
 
     if (savedRole && savedUserId && savedFullName) {
       setRole(savedRole);
       setUserId(savedUserId);
       setFullName(savedFullName);
+      setorganizationid(organizationid);
     } else {
       toast.error('Login data not found. Please log in again.');
     }
@@ -135,6 +139,7 @@ const LeaveRequestForm = () => {
         HodStatus: 0,
         HrStatus: 0,
         CeoStatus: 0,
+        organizationID,
     };
 
     try {

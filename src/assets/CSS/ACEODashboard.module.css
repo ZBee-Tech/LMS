@@ -56,11 +56,13 @@
   .saveButton {
     background-color: #4caf50;
     color: #fff;
-    margin-right: 10px;
+    margin-right: 10px;      
+
+  
   }
   
   .cancelButton {
     background-color: #f44336;
     color: #fff;
-  }
+   }
   

@@ -8,6 +8,7 @@ import styles from '../assets/CSS/LeaveRequestsPageForHR.module.css';
 const LeaveRequestsPageForHR = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [hrId, setHrId] = useState('');
+  const organizationId = localStorage.getItem('organizationId');  
 
   useEffect(() => {
     const savedHrId = localStorage.getItem('userId');
@@ -18,9 +19,10 @@ const LeaveRequestsPageForHR = () => {
         const leaveRequestCollection = collection(db, 'leaveRequests');
         const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
         const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        
-        // Filter requests where HOD has approved
-        const hrRequests = leaveRequestData.filter(request => request.HodStatus === 1);
+
+         const hrRequests = leaveRequestData.filter(request => 
+          request.HodStatus === 1 && request.organizationID === organizationId
+        );
         setLeaveRequests(hrRequests);
       } catch (error) {
         console.error('Error fetching leave requests:', error);
@@ -29,7 +31,7 @@ const LeaveRequestsPageForHR = () => {
     };
 
     fetchLeaveRequests();
-  }, []);
+  }, [organizationId]);
 
   const handleApprove = async (requestId) => {
     try {
@@ -95,7 +97,7 @@ const LeaveRequestsPageForHR = () => {
     const start = new Date(startDate.seconds * 1000);
     const end = new Date(endDate.seconds * 1000);
     const diffTime = Math.abs(end - start);
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include the end date
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;  
   };
 
   return (

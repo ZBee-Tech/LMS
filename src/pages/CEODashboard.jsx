@@ -23,8 +23,7 @@ const CEODashboard = () => {
         const querySnapshot = await getDocs(collection(db, 'Users'));
         const usersList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         
-        // Filter users by organizationId matching with CEO ID
-        const filteredUsers = usersList.filter((user) => user.organizationId === ceoId);
+         const filteredUsers = usersList.filter((user) => user.organizationId === ceoId);
         
         setUsers(filteredUsers);
       } catch (error) {
@@ -123,7 +122,7 @@ const CEODashboard = () => {
                     className={styles.actionButton}
                   >
                     Edit
-                  </Button>
+                  </Button> &nbsp;
                   <Button
                     variant="contained"
                     color="secondary"
@@ -139,8 +138,7 @@ const CEODashboard = () => {
         </Table>
       )}
 
-      {/* Edit User Modal */}
-      <Modal
+       <Modal
         open={open}
         onClose={handleModalClose}
         aria-labelledby="edit-user-modal"
@@ -195,7 +193,7 @@ const CEODashboard = () => {
               <Box display="flex" justifyContent="flex-end" mt={3}>
                 <Button variant="contained" color="primary" onClick={handleSaveChanges} className={styles.saveButton}>
                   Save Changes
-                </Button>
+                </Button>   
                 <Button variant="contained" color="default" onClick={handleModalClose} className={styles.cancelButton}>
                   Cancel
                 </Button>

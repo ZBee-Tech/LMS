@@ -9,6 +9,7 @@ const HomeHR = () => {
   const [users, setUsers] = useState([]);
   const [userRole, setUserRole] = useState('');
   const [loading, setLoading] = useState(false);
+  const [organizationId, setOrganizationId] = useState(localStorage.getItem('organizationId') || '');
 
   useEffect(() => {
     const storedUserRole = localStorage.getItem('userRole');
@@ -22,7 +23,7 @@ const HomeHR = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [organizationId]);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -32,7 +33,7 @@ const HomeHR = () => {
       const allUsers = userSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
       const filteredUsers = allUsers
-        .filter((user) => user.role === 'Employee' || user.role === 'HOD')
+        .filter((user) => (user.role === 'Employee' || user.role === 'HOD') && user.organizationId === organizationId)
         .map((user) => ({
           ...user,
           displayInfo: user.role === 'Employee' ? user.hodName || 'Unknown HOD' : user.department || 'Unknown Department',
@@ -88,8 +89,8 @@ const HomeHR = () => {
             <th>Name</th>
             <th>Role</th>
             <th>HOD/Department</th>
-             <th>Leave Limit</th>
-             <th>Actions</th>
+            <th>Leave Limit</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

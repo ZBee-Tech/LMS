@@ -17,6 +17,8 @@ const LoginPage = () => {
   useEffect(() => {
     const role = localStorage.getItem('role');
     const userId = localStorage.getItem('userId');
+    const organizationId = localStorage.getItem('organizationId');
+
     if (role && userId) {
       navigate('/dashboard');
     }
@@ -39,11 +41,13 @@ const LoginPage = () => {
        const userDoc = await getDoc(doc(db, "Users", user.uid));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        const { role, fullName } = userData;
+        const { role, fullName,organizationId } = userData;
 
          localStorage.setItem('role', role);
         localStorage.setItem('userId', user.uid);
         localStorage.setItem('fullName', fullName);
+        localStorage.setItem('organizationId', organizationId);
+
 
         toast.success('Login successful!');
         if(role ==="Employee"){
@@ -60,7 +64,7 @@ const LoginPage = () => {
 
         }
         if(role ==="CEO"){
-          navigate('/leavesDataCEO');
+          navigate('/ceohome');
 
         }
        } else {

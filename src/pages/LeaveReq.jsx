@@ -8,6 +8,7 @@ import styles from '../assets/CSS/LeaveRequestsPage.module.css';
 const LeaveRequestsPage = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [hodId, setHodId] = useState('');
+  const organizationId = localStorage.getItem('organizationId');  
 
   useEffect(() => {
     const savedHodId = localStorage.getItem('userId');  
@@ -17,18 +18,20 @@ const LeaveRequestsPage = () => {
       const leaveRequestCollection = collection(db, 'leaveRequests');
       const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
       const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setLeaveRequests(leaveRequestData);
+
+       const filteredRequests = leaveRequestData.filter(request => request.organizationID === organizationId);
+      setLeaveRequests(filteredRequests);
     };
 
     fetchLeaveRequests();
-  }, []);
+  }, [organizationId]);
 
   const handleApprove = async (requestId) => {
     try {
       const requestDocRef = doc(db, 'leaveRequests', requestId);
       await updateDoc(requestDocRef, {
         ApprovedbyHOD: hodId,
-        HodStatus: 1  // Approved
+        HodStatus: 1   
       });
       toast.success('Leave request approved successfully!');
       setLeaveRequests(prevRequests =>
@@ -88,32 +91,38 @@ const LeaveRequestsPage = () => {
           </tr>
         </thead>
         <tbody>
-          {leaveRequests.map((request) => (
-            <tr key={request.id}>
-              <td>{request.leaveType}</td>
-              <td>{new Date(request.startDate.seconds * 1000).toLocaleDateString()}</td>
-              <td>{new Date(request.endDate.seconds * 1000).toLocaleDateString()}</td>
-              <td>{request.reason || 'N/A'}</td>
-              <td>{request.fullName}</td>
-              <td>{getHodStatusLabel(request.HodStatus)}</td>
-              <td>
-                {request.HodStatus === 0 && (
-                  <>
-                    <button 
-                      className={styles.approveButton} 
-                      onClick={() => handleApprove(request.id)}>
-                      Approve
-                    </button>
-                    <button 
-                      className={styles.declineButton} 
-                      onClick={() => handleDecline(request.id)}>
-                      Decline
-                    </button>
-                  </>
-                )}
-              </td>
+          {leaveRequests.length > 0 ? (
+            leaveRequests.map((request) => (
+              <tr key={request.id}>
+                <td>{request.leaveType}</td>
+                <td>{new Date(request.startDate.seconds * 1000).toLocaleDateString()}</td>
+                <td>{new Date(request.endDate.seconds * 1000).toLocaleDateString()}</td>
+                <td>{request.reason || 'N/A'}</td>
+                <td>{request.fullName}</td>
+                <td>{getHodStatusLabel(request.HodStatus)}</td>
+                <td>
+                  {request.HodStatus === 0 && (
+                    <>
+                      <button 
+                        className={styles.approveButton} 
+                        onClick={() => handleApprove(request.id)}>
+                        Approve
+                      </button>
+                      <button 
+                        className={styles.declineButton} 
+                        onClick={() => handleDecline(request.id)}>
+                        Decline
+                      </button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7" className={styles.noRequests}>No leave requests found for your organization.</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
       <ToastContainer />
