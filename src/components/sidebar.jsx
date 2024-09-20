@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaInfoCircle, FaBars, FaEnvelope } from 'react-icons/fa';  
+import { FaHome, FaUserPlus, FaBars, FaEnvelope, FaCalendarAlt, FaUserTie, FaUsers, FaClipboardList, FaFileAlt } from 'react-icons/fa';  
 import styles from '../assets/CSS/sidebar.module.css'; 
 
 const Sidebar = () => {
@@ -8,7 +8,7 @@ const Sidebar = () => {
   const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
-     const savedRole = localStorage.getItem('role');
+    const savedRole = localStorage.getItem('role');
     if (savedRole) {
       setUserRole(savedRole);
     }
@@ -24,120 +24,102 @@ const Sidebar = () => {
         <FaBars className={styles.icon} />
       </div>
       <ul>
-  
-        
-    
-        {userRole === 'CEO' ? (
+        {userRole === 'CEO' && (
           <>
+            <li>
+              <Link to="/ceohome">
+                <FaHome className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Home</span>}
+              </Link>
+            </li>
+            <li>
+              <Link to="/addusers">
+                <FaUserPlus className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Add Users</span>}
+              </Link>
+            </li>
+            <li>
+              <Link to="/leavesDataCEO">
+                <FaEnvelope className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Leave Requests</span>}
+              </Link>
+            </li>
+          </>
+        )}
 
-<li>
-    <Link to="/ceohome">
-      <FaInfoCircle className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>Home</span>}
-    </Link>
-    
-  </li>
-  <li>
-    <Link to="/addusers">
-      <FaHome className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>Add Users</span>}
-    </Link>
-    
-  </li>
-
-  <li>
-    <Link to="/leavesDataCEO">
-      <FaEnvelope className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>Leave Requests </span>}
-    </Link>
-    
-  </li>
-  </>
-) : (
-<></>
-)
-
-
-}
-    
-{userRole === 'Employee' ? (
+        {userRole === 'Employee' && (
           <>
-  <li>
-    <Link to="/leaveform">
-      <FaInfoCircle className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>LeaveForm</span>}
-    </Link>
-    
-  </li>
-  <li>
-    <Link to="/leaveoverview">
-      <FaEnvelope className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>Leave Requests </span>}
-    </Link>
-    
-  </li>
-  </>
-) : (
-<></>
-)
+            <li>
+              <Link to="/leaveform">
+                <FaFileAlt className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Leave Form</span>}
+              </Link>
+            </li>
+            <li>
+              <Link to="/leaveoverview">
+                <FaClipboardList className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Leave Requests</span>}
+              </Link>
+            </li>
+          </>
+        )}
 
-
-}
-
-{userRole === 'HOD' ? (
+        {userRole === 'HOD' && (
           <>
-  <li>
-    <Link to="/leavesDataHOD">
-      <FaInfoCircle className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>Leave Requests</span>}
-    </Link>
-    
-  </li>
- 
-  </>
-) : (
-<></>
-)
+            <li>
+              <Link to="/leavesDataHOD">
+                <FaClipboardList className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Leave Requests</span>}
+              </Link>
+            </li>
+          </>
+        )}
 
-
-}
-{userRole === 'HR Manager' ? (
+        {userRole === 'Admin' && (
           <>
-           <li>
-    <Link to="/HomeHR">
-      <FaHome className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>Home</span>}
-    </Link>
-    
-  </li>
-  <li>
-    <Link to="/addHOD">
-      <FaInfoCircle className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>Add HOD/Employee</span>}
-    </Link>
-    
-  </li>
-  <li>
-    <Link to="/leavesDataHR">
-      <FaEnvelope className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>Leave Requests HR </span>}
-    </Link>
-    
-  </li>
-  <li>
-    <Link to="/addleavetype">
-      <FaHome className={styles.icon} />
-      {!isCollapsed && <span className={styles.label}>Add Leave Type</span>}
-    </Link>
-    
-  </li>
-  </>
-) : (
-  <></>
-)
-}
+            <li>
+              <Link to="/adminhome">
+                <FaUsers className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Users</span>}
+              </Link>
+            </li>
+            <li>
+              <Link to="/leavereqsall">
+                <FaCalendarAlt className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Leave Requests</span>}
+              </Link>
+            </li>
+          </>
+        )}
 
-  
+        {userRole === 'HR Manager' && (
+          <>
+            <li>
+              <Link to="/HomeHR">
+                <FaHome className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Home</span>}
+              </Link>
+            </li>
+            <li>
+              <Link to="/addHOD">
+                <FaUserTie className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Add HOD/Employee</span>}
+              </Link>
+            </li>
+            <li>
+              <Link to="/leavesDataHR">
+                <FaEnvelope className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Leave Requests HR</span>}
+              </Link>
+            </li>
+            <li>
+              <Link to="/addleavetype">
+                <FaCalendarAlt className={styles.icon} />
+                {!isCollapsed && <span className={styles.label}>Add Leave Type</span>}
+              </Link>
+            </li>
+          </>
+        )}
       </ul>
     </aside>
   );

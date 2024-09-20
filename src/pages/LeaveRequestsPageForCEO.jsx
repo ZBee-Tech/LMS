@@ -20,7 +20,12 @@ const LeaveRequestsPageForCEO = () => {
         const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
         const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
-         const ceoRequests = leaveRequestData.filter(request => request.HodStatus === 1 && request.HrStatus === 1  && request.organizationID === ceoId);
+         const ceoRequests = leaveRequestData.filter(request => 
+          request.HodStatus === 1 && 
+          request.HrStatus === 1 && 
+          request.organizationID === ceoId
+        );
+        
         setLeaveRequests(ceoRequests);
       } catch (error) {
         console.error('Error fetching leave requests:', error);
@@ -29,7 +34,7 @@ const LeaveRequestsPageForCEO = () => {
     };
 
     fetchLeaveRequests();
-  }, []);
+  }, [ceoId]);
 
   const handleApprove = async (requestId) => {
     try {

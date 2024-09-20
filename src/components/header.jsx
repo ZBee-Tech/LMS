@@ -34,6 +34,8 @@ const Header = () => {
     localStorage.removeItem('role');
     localStorage.removeItem('userId');
     localStorage.removeItem('fullName');
+    localStorage.removeItem('organizationId');
+
     navigate('/');
   };
 

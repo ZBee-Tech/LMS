@@ -67,6 +67,10 @@ const LoginPage = () => {
           navigate('/ceohome');
 
         }
+        if(role ==="Admin"){
+          navigate('/adminhome');
+
+        }
        } else {
         toast.error('User not found in Firestore.');
       }
@@ -119,14 +123,14 @@ const LoginPage = () => {
               </div>
               <div className='text-center text-md-start mt-4 pt-2'>
                 <button 
-                  className={`${styles.loginButton} mb-0 px-5`} 
+                  className={`${styles.loginButton} mb-0 px-5 `} 
                   size='lg' 
                   type="submit" 
                   disabled={loading}
                 >
                   {loading ? 'Logging In...' : 'Login'}
                 </button>
-                <p className="small fw-bold mt-2 pt-1 mb-2">
+                <p className="small fw-bold mt-2 pt-1 mb-2 "> 
                   Don't have an account? <Link to="/signup" className="link-danger">Register</Link>
                 </p>
               </div>
