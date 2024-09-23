@@ -11,7 +11,7 @@ import { setDoc, doc } from "firebase/firestore";
 const SignupPage = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState(Math.random().toString(36).slice(2));
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('');
   const [loading, setLoading] = useState(false);

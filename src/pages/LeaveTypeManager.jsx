@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase-config';
-import { collection, doc, setDoc, deleteDoc, getDocs, Timestamp } from 'firebase/firestore';  
+import { collection, doc, setDoc, deleteDoc, getDocs, Timestamp } from 'firebase/firestore';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { TextField, Button, Typography, Container, Grid, CircularProgress } from '@mui/material';
 
 const LeaveTypeManager = () => {
   const [leaveType, setLeaveType] = useState('');
-  const [limit, setLimit] = useState('');  
+  const [limit, setLimit] = useState('');
   const [leaveTypes, setLeaveTypes] = useState([]);
   const [hrId, setHrId] = useState(localStorage.getItem('userId') || '');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-     const fetchLeaveTypes = async () => {
+    const fetchLeaveTypes = async () => {
       try {
         const leaveTypesCollection = collection(db, 'LeaveTypes');
         const leaveTypesSnapshot = await getDocs(leaveTypesCollection);
@@ -37,7 +37,7 @@ const LeaveTypeManager = () => {
 
     try {
       const createdAt = Timestamp.now();
-      
+
       const leaveData = {
         leaveType: leaveType.trim(),
         limit: parseInt(limit, 10) || 0,
@@ -51,11 +51,11 @@ const LeaveTypeManager = () => {
       await setDoc(leaveRef, leaveData);
 
       toast.success('Leave type added successfully!');
-      
-      setLeaveType('');
-      setLimit(''); 
 
-       const leaveTypesCollection = collection(db, 'LeaveTypes');
+      setLeaveType('');
+      setLimit('');
+
+      const leaveTypesCollection = collection(db, 'LeaveTypes');
       const leaveTypesSnapshot = await getDocs(leaveTypesCollection);
       const leaveTypesList = leaveTypesSnapshot.docs.map(doc => ({
         id: doc.id,
@@ -74,8 +74,8 @@ const LeaveTypeManager = () => {
     try {
       await deleteDoc(doc(db, 'LeaveTypes', id));
       toast.success('Leave type deleted successfully!');
-      
-       const leaveTypesCollection = collection(db, 'LeaveTypes');
+
+      const leaveTypesCollection = collection(db, 'LeaveTypes');
       const leaveTypesSnapshot = await getDocs(leaveTypesCollection);
       const leaveTypesList = leaveTypesSnapshot.docs.map(doc => ({
         id: doc.id,
@@ -105,7 +105,7 @@ const LeaveTypeManager = () => {
               required
             />
           </Grid>
-          <Grid item xs={12}>
+           { /* <Grid item xs={12}>
             <TextField
               fullWidth
               label="Limit (Days)"
@@ -115,7 +115,7 @@ const LeaveTypeManager = () => {
               variant="outlined"
               required
             />
-          </Grid>
+          </Grid> */ }
 
           <Grid item xs={12}>
             <Button
@@ -130,33 +130,40 @@ const LeaveTypeManager = () => {
           </Grid>
         </Grid>
       </form>
-
-      <Typography variant="h6" align="center" gutterBottom>
-        Leave Types
-      </Typography>
-      <Grid container spacing={2}>
-        {leaveTypes.map(({ id, leaveType, limit }) => (
-          <Grid item xs={12} key={id}>
-            <Grid container alignItems="center" spacing={2}>
-              <Grid item xs={6}>
-                <Typography variant="body1">{leaveType}</Typography>
-                <Typography variant="body2">Limit: {limit} days</Typography>
-              </Grid>
-              <Grid item xs={6} container justifyContent="flex-end" spacing={1}>
-                <Grid item>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => handleDeleteLeaveType(id)}
-                  >
-                    Delete
-                  </Button>
+      <br />
+      <br />
+      {
+        leaveTypes.length > 0 ?
+          <>
+            <Typography variant="h6" align="center" gutterBottom>
+              Leave Types
+            </Typography>
+            <Grid container spacing={2}>
+              {leaveTypes.map(({ id, leaveType, limit }) => (
+                <Grid item xs={12} key={id}>
+                  <Grid container alignItems="center" spacing={2}>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">{leaveType}</Typography>
+                      {/* <Typography variant="body2">Limit: {limit} days</Typography> */}
+                    </Grid>
+                    <Grid item xs={6} container justifyContent="flex-end" spacing={1}>
+                      <Grid item>
+                        <Button
+                          variant="outlined"
+                          color="secondary"
+                          onClick={() => handleDeleteLeaveType(id)}
+                        >
+                          Delete
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Grid>
-              </Grid>
+              ))}
             </Grid>
-          </Grid>
-        ))}
-      </Grid>
+          </> : ''
+      }
+
 
       <ToastContainer />
     </Container>

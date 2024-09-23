@@ -21,6 +21,7 @@
     "@mui/x-date-pickers": "^7.17.0",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "e-conges": "file:",
     "firebase": "^10.13.1",
     "mdb-react-ui-kit": "^9.0.0",
     "react": "^18.3.1",

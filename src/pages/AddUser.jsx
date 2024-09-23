@@ -13,7 +13,7 @@ const AddUser = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState(Math.random().toString(36).slice(2));
   const [createdBy, setCreatedBy] = useState(localStorage.getItem('userId') || '');
   const [loading, setLoading] = useState(false);
   const [UID, setUID] = useState('');
