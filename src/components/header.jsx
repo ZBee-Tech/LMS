@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import styles from '../assets/CSS/Header.module.css';
@@ -7,35 +7,32 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 const Header = () => {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
-  const queryClient = useQueryClient();  
-  const navigate = useNavigate();  
+  const [notifications, setNotifications] = useState([]);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const userName = localStorage.getItem('fullName') || 'User';
   const userRole = localStorage.getItem('role') || 'Role';
-  const approvedLeaveCount = parseInt(localStorage.getItem('approvedLeaveCount')) || 0;
+  const hodStatus = localStorage.getItem('HodStatus'); // Changed to directly get value from localStorage
 
-  const notifications = [
-    "Your leave was approved! ✅",
-   ];
+  useEffect(() => {
+    if (hodStatus === '0') {
+      setNotifications([
+        'You have pending leave requests to approve!',
+    
+      ]);
+    } else {
+      setNotifications([]);  
+    }
+  }, [hodStatus]); // Removed userRole as it is not needed for this logic
 
   const toggleProfileDropdown = () => {
-    setProfileDropdownOpen(!profileDropdownOpen);
-  };
-
-  const toggleNotificationDropdown = () => {
-    setNotificationDropdownOpen(!notificationDropdownOpen);
-    if (approvedLeaveCount > 0) {
-      localStorage.setItem('approvedLeaveCount', 0);
-    }
+    setProfileDropdownOpen((prev) => !prev);
   };
 
   const handleLogout = () => {
     queryClient.clear();
-    localStorage.removeItem('role');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('fullName');
-    localStorage.removeItem('organizationId');
-
+    localStorage.clear();  
     navigate('/');
   };
 
@@ -52,26 +49,10 @@ const Header = () => {
       </div>
 
       <div className="d-flex align-items-center">
-        <div className={styles.notification} onClick={toggleNotificationDropdown}>
+        <div className={styles.notification} onClick={() => setNotificationDropdownOpen((prev) => !prev)}>
           <i className="fas fa-bell"></i>
-          {approvedLeaveCount > 0 && (
-            <span className={styles.notificationCount}>{approvedLeaveCount}</span>
-          )}
+          <span className={styles.notificationDot}></span>
         </div>
-
-        {notificationDropdownOpen && (
-          <div className={styles.notificationDropdown}>
-            {notifications.length > 0 ? (
-              notifications.map((msg, index) => (
-                <div key={index} className={styles.notificationItem}>
-                  {msg}
-                </div>
-              ))
-            ) : (
-              <div className={styles.notificationItem}>No new notifications.</div>
-            )}
-          </div>
-        )}
 
         <div className={styles.dropdown}>
           <div className={styles.avatar} onClick={toggleProfileDropdown}>
@@ -97,6 +78,20 @@ const Header = () => {
           </div>
         </div>
       </div>
+
+      {notificationDropdownOpen && (
+        <div className={styles.notificationDropdown}>
+          {notifications.length > 0 ? (
+            notifications.map((notification, index) => (
+              <div key={index} className={styles.notificationItem}>
+                {notification}
+              </div>
+            ))
+          ) : (
+            <div className={styles.notificationItem}>No new notifications</div>
+          )}
+        </div>
+      )}
     </nav>
   );
 };

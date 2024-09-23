@@ -86,19 +86,28 @@
 .userName{
   font-weight: bold ;
 }
-
+.notification{
+  right : 20px;
+}
 .notificationDropdown {
   position: absolute;
-  top: 50px;  
-  right: 20px;  
+  top: 70px;  
+  right: 70px;  
+  border: 1px solid #ddd;
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   width: 200px;  
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
 }
-
+.notificationDropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
 .notificationItem {
   padding: 10px;
   border-bottom: 1px solid #ddd;
@@ -110,4 +119,19 @@
 
 .notificationItem:hover {
   background-color: #f1f1f1;
+}
+ 
+.notification {
+  position: relative;
+  cursor: pointer;
+}
+
+.notificationDot {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
 }

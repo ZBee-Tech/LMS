@@ -97,59 +97,65 @@ const LeaveRequestForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     if (daysRequested > Check) {
-        toast.error(`Please apply according to your leave limit. Your limit for leaves was ${Check}.`);
-        return;
+      toast.error(`Please apply according to your leave limit. Your limit for leaves was ${Check}.`);
+      return;
     }
     if (!startDate || !endDate) {
-        toast.error('Please select both start and end dates.');
-        return;
+      toast.error('Please select both start and end dates.');
+      return;
     }
-
+  
     if (endDate < startDate) {
-        toast.error('End date must be after start date.');
-        return;
+      toast.error('End date must be after start date.');
+      return;
     }
-
+  
     const leaveLimit = leaveLimits[leaveType];
     if (leaveLimit !== undefined && daysRequested > leaveLimit) {
-        toast.error(`You cannot request more than ${leaveLimit} days of ${leaveType}.`);
-        return;
+      toast.error(`You cannot request more than ${leaveLimit} days of ${leaveType}.`);
+      return;
     }
-
-    toast.success('Leave request submitted successfully!');
+  
     const createdAt = new Date();
     const modifiedAt = new Date();
     const createdBy = userId;
     const modifiedBy = userId;
-
+  
     const leaveRequestData = {
-        leaveType,
-        startDate,
-        endDate,
-        reason,
-        role,
-        userId,
-        fullName,
-        createdAt,
-        createdBy,
-        modifiedAt,
-        modifiedBy,
-        Status: 0,
-        HodStatus: 0,
-        HrStatus: 0,
-        CeoStatus: 0,
-        organizationID,
+      leaveType,
+      startDate,
+      endDate,
+      reason,
+      role,
+      userId,
+      fullName,
+      createdAt,
+      createdBy,
+      modifiedAt,
+      modifiedBy,
+      Status: 0,
+      HodStatus: 0,
+      HrStatus: 0,
+      CeoStatus: 0,
+      organizationID,
     };
-
+  
     try {
-        await addDoc(collection(db, 'leaveRequests'), leaveRequestData);
-        console.log('Leave request saved to Firebase');
+      await addDoc(collection(db, 'leaveRequests'), leaveRequestData);
+      toast.success('Leave request submitted successfully!');
+  
+      setLeaveType('');
+      setStartDate(null);
+      setEndDate(null);
+      setReason('');
     } catch (error) {
-        console.error('Error saving leave request to Firebase:', error);
-        toast.error('Failed to submit leave request.');
+      console.error('Error saving leave request to Firebase:', error);
+      toast.error('Failed to submit leave request.');
     }
   };
+  
 
   return (
     <div className={styles.container}>

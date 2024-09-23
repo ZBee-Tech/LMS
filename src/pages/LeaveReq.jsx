@@ -8,10 +8,10 @@ import styles from '../assets/CSS/LeaveRequestsPage.module.css';
 const LeaveRequestsPage = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [hodId, setHodId] = useState('');
-  const organizationId = localStorage.getItem('organizationId');  
+  const organizationId = localStorage.getItem('organizationId');
 
   useEffect(() => {
-    const savedHodId = localStorage.getItem('userId');  
+    const savedHodId = localStorage.getItem('userId');
     setHodId(savedHodId);
 
     const fetchLeaveRequests = async () => {
@@ -19,8 +19,14 @@ const LeaveRequestsPage = () => {
       const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
       const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-       const filteredRequests = leaveRequestData.filter(request => request.organizationID === organizationId);
+      const filteredRequests = leaveRequestData.filter(request => request.organizationID === organizationId);
       setLeaveRequests(filteredRequests);
+
+       filteredRequests.forEach(request => {
+        if (request.HodStatus === 0) {
+          localStorage.setItem('HodStatus', '0');   
+        }
+      });
     };
 
     fetchLeaveRequests();
@@ -31,11 +37,11 @@ const LeaveRequestsPage = () => {
       const requestDocRef = doc(db, 'leaveRequests', requestId);
       await updateDoc(requestDocRef, {
         ApprovedbyHOD: hodId,
-        HodStatus: 1   
+        HodStatus: 1
       });
       toast.success('Leave request approved successfully!');
       setLeaveRequests(prevRequests =>
-        prevRequests.map(request => 
+        prevRequests.map(request =>
           request.id === requestId ? { ...request, ApprovedbyHOD: hodId, HodStatus: 1 } : request
         )
       );
@@ -50,11 +56,11 @@ const LeaveRequestsPage = () => {
       const requestDocRef = doc(db, 'leaveRequests', requestId);
       await updateDoc(requestDocRef, {
         ApprovedbyHOD: hodId,
-        HodStatus: -1  // Declined
+        HodStatus: -1   
       });
       toast.success('Leave request declined successfully!');
       setLeaveRequests(prevRequests =>
-        prevRequests.map(request => 
+        prevRequests.map(request =>
           request.id === requestId ? { ...request, ApprovedbyHOD: hodId, HodStatus: -1 } : request
         )
       );
