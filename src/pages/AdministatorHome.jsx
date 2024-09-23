@@ -3,8 +3,27 @@ import { db } from '../firebase-config';
 import { collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import styles from '../assets/CSS/ACEODashboard.module.css';
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, Container, Typography, CircularProgress, Modal, Box, TextField, IconButton, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { Close as CloseIcon, Label } from '@mui/icons-material';
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Container,
+  Typography,
+  CircularProgress,
+  Modal,
+  Box,
+  TextField,
+  IconButton,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Grid,
+} from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,7 +34,7 @@ const AdminDashboard = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
-  const [recordCount, setRecordCount] = useState(10);  
+  const [recordCount, setRecordCount] = useState(10);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,15 +44,14 @@ const AdminDashboard = () => {
         const querySnapshot = await getDocs(collection(db, 'Users'));
         const usersList = querySnapshot.docs
           .map((doc) => ({ id: doc.id, ...doc.data() }))
-          .filter((user) => user.role !== 'Admin'); // Exclude Admin users
-  
+          .filter((user) => user.role !== 'Admin');
+
         const ceo = usersList.find(user => user.role === 'CEO');
-  
         const updatedUsers = usersList.map(user => ({
           ...user,
           organizationName: user.role === 'CEO' ? user.fullName : (ceo ? ceo.fullName : 'N/A'),
         }));
-  
+
         setUsers(updatedUsers);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -42,10 +60,10 @@ const AdminDashboard = () => {
         setLoading(false);
       }
     };
-  
+
     fetchUsers();
   }, []);
-  
+
   const handleEdit = (user) => {
     setSelectedUser(user);
     setOpen(true);
@@ -132,7 +150,9 @@ const AdminDashboard = () => {
 
   return (
     <Container className={styles.dashboardContainer}>
-       <p align="center"><b >All Users and Organizations</b></p>
+      <Typography variant="h6" align="center" gutterBottom>
+        All Users and Organizations
+      </Typography>
       <TextField
         label="Search Users"
         variant="outlined"
@@ -141,47 +161,49 @@ const AdminDashboard = () => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-<div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '16px' }}>
-  <FormControl margin="normal">
-    <p id="role-filter-label" style={{ marginBottom: '4px' }}>Filter by Role</p>
-    <Select
-      labelId="role-filter-label"
-      value={roleFilter}
-      onChange={(e) => setRoleFilter(e.target.value)}
-      displayEmpty
-      style={{ minWidth: '150px' }} // Adjust width as needed
-    >
-      <MenuItem value="">All</MenuItem>
-      <MenuItem value="CEO">CEO</MenuItem>
-      <MenuItem value="HR Manager">HR Manager</MenuItem>
-      <MenuItem value="HOD">HOD</MenuItem>
-    </Select>
-  </FormControl>
-
-  <FormControl margin="normal">
-    <p id="record-count-label" style={{ marginBottom: '4px' }}>Records per Page</p>
-    <Select
-      labelId="record-count-label"
-      value={recordCount}
-      onChange={(e) => setRecordCount(e.target.value)}
-      style={{ minWidth: '150px' }} // Adjust width as needed
-    >
-      <MenuItem value={10}>10</MenuItem>
-      <MenuItem value={20}>20</MenuItem>
-      <MenuItem value={30}>30</MenuItem>
-      <MenuItem value={100}>100</MenuItem>
-    </Select>
-  </FormControl>
-
-  <Button
-    variant="contained"
-    color="primary"
-    onClick={handleExportCSV}
-    style={{ marginTop:'42px' }}
-  >
-    Export to CSV
-  </Button>
-</div>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item xs={12} sm={6} md={4}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="role-filter-label">Filter by Role</InputLabel>
+            <Select
+              labelId="role-filter-label"
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              displayEmpty
+            >
+              <MenuItem value=""> </MenuItem>
+              <MenuItem value="CEO">CEO</MenuItem>
+              <MenuItem value="HR Manager">HR Manager</MenuItem>
+              <MenuItem value="HOD">HOD</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel id="record-count-label">Records per Page</InputLabel>
+            <Select
+              labelId="record-count-label"
+              value={recordCount}
+              onChange={(e) => setRecordCount(e.target.value)}
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={30}>30</MenuItem>
+              <MenuItem value={100}>100</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleExportCSV}
+            fullWidth
+          >
+            Export to CSV
+          </Button>
+        </Grid>
+      </Grid>
 
       {loading ? (
         <CircularProgress className={styles.loader} />
@@ -213,7 +235,8 @@ const AdminDashboard = () => {
                     className={styles.actionButton}
                   >
                     Edit
-                  </Button> &nbsp;
+                  </Button> 
+                  &nbsp;
                   <Button
                     variant="contained"
                     color="secondary"
@@ -225,10 +248,8 @@ const AdminDashboard = () => {
                 </TableCell>
               </TableRow>
             ))}
-       
           </TableBody>
         </Table>
-        
       )}
 
       <Modal
@@ -266,15 +287,6 @@ const AdminDashboard = () => {
                 className={styles.inputField}
               />
               <TextField
-                label="Role"
-                name="role"
-                value={selectedUser.role}
-                fullWidth
-                margin="normal"
-                disabled
-                className={styles.inputField}
-              />
-              <TextField
                 label="Username"
                 name="username"
                 value={selectedUser.username}
@@ -283,21 +295,14 @@ const AdminDashboard = () => {
                 margin="normal"
                 className={styles.inputField}
               />
-              <Box display="flex" justifyContent="flex-end" mt={3}>
-                <Button variant="contained" color="primary" onClick={handleSaveChanges} className={styles.saveButton}>
-                  Save Changes
-                </Button>   
-                <Button variant="contained" color="default" onClick={handleModalClose} className={styles.cancelButton}>
-                  Cancel
-                </Button>
-              </Box>
+              <Button variant="contained" color="primary" onClick={handleSaveChanges} fullWidth>
+                Save Changes
+              </Button>
             </>
           )}
         </Box>
       </Modal>
-
       <ToastContainer />
-      
     </Container>
   );
 };

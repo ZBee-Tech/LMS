@@ -17,7 +17,6 @@ const LoginPage = () => {
   useEffect(() => {
     const role = localStorage.getItem('role');
     const userId = localStorage.getItem('userId');
-    const organizationId = localStorage.getItem('organizationId');
 
     if (role && userId) {
       navigate('/dashboard');
@@ -29,49 +28,32 @@ const LoginPage = () => {
     setLoading(true);
     
     try {
-       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-       if (!user.emailVerified) {
+      if (!user.emailVerified) {
         toast.error('Please verify your email address before logging in.');
         setLoading(false);
         return;
       }
 
-       const userDoc = await getDoc(doc(db, "Users", user.uid));
+      const userDoc = await getDoc(doc(db, "Users", user.uid));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        const { role, fullName,organizationId } = userData;
+        const { role, fullName, organizationId } = userData;
 
-         localStorage.setItem('role', role);
+        localStorage.setItem('role', role);
         localStorage.setItem('userId', user.uid);
         localStorage.setItem('fullName', fullName);
         localStorage.setItem('organizationId', organizationId);
 
-
         toast.success('Login successful!');
-        if(role ==="Employee"){
-          navigate('/leaveoverview');
-
-        }
-        if(role ==="HR Manager"
-){
-          navigate('/homehr');
-
-        }
-        if(role ==="HOD"){
-          navigate('/leavesDataHOD');
-
-        }
-        if(role ==="CEO"){
-          navigate('/ceohome');
-
-        }
-        if(role ==="Admin"){
-          navigate('/adminhome');
-
-        }
-       } else {
+        navigate(role === "Employee" ? '/leaveoverview' : 
+                 role === "HR Manager" ? '/homehr' : 
+                 role === "HOD" ? '/leavesDataHOD' : 
+                 role === "CEO" ? '/ceohome' : 
+                 '/adminhome');
+      } else {
         toast.error('User not found in Firestore.');
       }
     } catch (err) {
@@ -86,7 +68,7 @@ const LoginPage = () => {
     <>
       <MDBContainer fluid className="p-3 my-5 h-100 d-flex justify-content-center align-items-center">
         <MDBRow className="d-flex justify-content-center align-items-center w-100">
-          <MDBCol col='10' md='6'>
+          <MDBCol md='6' className="d-none d-md-flex justify-content-center">
             <img
               src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
               className="img-fluid"
@@ -94,7 +76,7 @@ const LoginPage = () => {
             />
           </MDBCol>
 
-          <MDBCol col='4' md='6'>
+          <MDBCol md='6'>
             <h2 className="text-center mb-4">Login</h2>
             <form onSubmit={handleLogin} className={styles.formContainer}>
               <MDBInput
@@ -123,7 +105,7 @@ const LoginPage = () => {
               </div>
               <div className='text-center text-md-start mt-4 pt-2'>
                 <button 
-                  className={`${styles.loginButton} mb-0 px-5 `} 
+                  className={`${styles.loginButton} mb-0 px-5`} 
                   size='lg' 
                   type="submit" 
                   disabled={loading}

@@ -1,28 +1,14 @@
- .selectContainer {
-    margin: 1rem 0;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-  
-  .selectLabel {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: #333;
-  }
-  
-  .selectBox {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 300px;
-  }
-   .loginButton{
-    width:20%;
-    border: none;
-    background: #0e5db8;
-    border-radius: 5px;
-    padding: 2px;
-    color: seashell;   }
+.loginButton {
+  width: 100%; /* Full width on smaller screens */
+  max-width: 300px; /* Limit the max width */
+  border: none;
+  background: #0e5db8;
+  border-radius: 5px;
+  padding: 10px; /* Increased padding for touch targets */
+  color: seashell;
+  transition: background-color 0.3s;
+}
+
+.loginButton:hover {
+  background-color: #0a4d88; /* Darken on hover */
+}

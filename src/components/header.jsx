@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../firebase-config';
 import styles from '../assets/CSS/Header.module.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -8,33 +10,55 @@ const Header = () => {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const userName = localStorage.getItem('fullName') || 'User';
-  const userRole = localStorage.getItem('role') || 'Role';
-  const hodStatus = localStorage.getItem('HodStatus');  
-  const hRStatus = localStorage.getItem('HRStatus');  
-  const ceoStatus = localStorage.getItem('ceoStatus');  
-  const userStatus = localStorage.getItem('userStatus');  
+  const userRole = (localStorage.getItem('role') || 'Role').trim();  
+  const organizationId = localStorage.getItem('organizationId');  
+  const userId = localStorage.getItem('userId');  
 
   useEffect(() => {
-    const newNotifications = [];
-    if (hodStatus === '0') {
-      newNotifications.push({ message: 'You have pending leave requests to approve!', read: false });
-    }
-    if (hRStatus === '0') {
-      newNotifications.push({ message: 'You have pending leave requests to approve!', read: false });
-    } 
-    if (ceoStatus === '0') {
-      newNotifications.push({ message: 'You have pending leave requests to approve!', read: false });
-    }
-    if(userStatus === '1'){
-      newNotifications.push({ message: 'Your leave request was approved ✅', read: false });
-    }
+    const fetchNotifications = async () => {
+      try {
+        setLoading(true);  
+        const leaveRequestsRef = collection(db, 'leaveRequests');
+        let leaveRequestsQuery;
 
-    setNotifications(newNotifications);
-  }, [hodStatus, hRStatus, ceoStatus]);  
+        if (userRole === 'HR Manager') {
+          leaveRequestsQuery = query(leaveRequestsRef, where('HrStatus', '==', 0), where('organizationID', '==', organizationId));
+        } else if (userRole === 'CEO') {
+          leaveRequestsQuery = query(leaveRequestsRef, where('CeoStatus', '==', 0), where('organizationID', '==', organizationId), where('HrStatus', '==', 1));
+        } else if (userRole === 'HOD') {
+          leaveRequestsQuery = query(leaveRequestsRef, where('HodStatus', '==', 0), where('organizationID', '==', organizationId));
+        } else if (userRole === 'Employee') {
+          leaveRequestsQuery = query(leaveRequestsRef, where('Status', '==', 1), where('userId', '==', userId));
+        } else {
+          return;  
+        }
+
+        const querySnapshot = await getDocs(leaveRequestsQuery);
+
+        const allLeaveRequests = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          console.log('Leave Request:', data);
+
+          return {
+            message: userRole === "Employee" ?  `Your leave request has been Approved for reasson  ${data.leaveType}` : `Leave request from ${data.fullName}`,
+            read: false,
+          };});
+          
+        setNotifications(allLeaveRequests);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      } finally {
+        setLoading(false);  
+      }
+    };
+
+    fetchNotifications();
+  }, [userRole, organizationId, userId]);  
 
   const toggleProfileDropdown = () => {
     setProfileDropdownOpen((prev) => !prev);
@@ -42,14 +66,17 @@ const Header = () => {
 
   const handleLogout = () => {
     queryClient.clear();
-    localStorage.clear();  
+    localStorage.clear();
     navigate('/');
   };
 
   const handleNotificationClick = () => {
     setNotificationDropdownOpen((prev) => !prev);
     if (!notificationDropdownOpen) {
-       const updatedNotifications = notifications.map(notification => ({ ...notification, read: true }));
+      const updatedNotifications = notifications.map((notification) => ({
+        ...notification,
+        read: true,
+      }));
       setNotifications(updatedNotifications);
     }
   };
@@ -67,10 +94,16 @@ const Header = () => {
       </div>
 
       <div className="d-flex align-items-center">
-        <div className={styles.notification} onClick={handleNotificationClick}>
-          <i className="fas fa-bell"></i>
-          <span className={`${styles.notificationDot} ${notifications.some(notification => !notification.read) ? styles.visible : ''}`}></span>
-        </div>
+        {(userRole === 'HR Manager' || userRole === 'CEO' || userRole === 'HOD' || userRole === 'Employee') && (
+          <div className={styles.notification} onClick={handleNotificationClick}>
+            <i className="fas fa-bell"></i>
+            <span
+              className={`${styles.notificationDot} ${
+                notifications.some((notification) => !notification.read) ? styles.visible : ''
+              }`}
+            ></span>
+          </div>
+        )}
 
         <div className={styles.dropdown}>
           <div className={styles.avatar} onClick={toggleProfileDropdown}>
@@ -99,7 +132,9 @@ const Header = () => {
 
       {notificationDropdownOpen && (
         <div className={styles.notificationDropdown}>
-          {notifications.length > 0 ? (
+          {loading ? (
+            <div className={styles.notificationItem}>Loading...</div>
+          ) : notifications.length > 0 ? (
             notifications.map((notification, index) => (
               <div key={index} className={styles.notificationItem}>
                 {notification.read ? (
