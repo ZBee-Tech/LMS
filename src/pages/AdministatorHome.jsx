@@ -23,14 +23,17 @@ const AdminDashboard = () => {
       setLoading(true);
       try {
         const querySnapshot = await getDocs(collection(db, 'Users'));
-        const usersList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const usersList = querySnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+          .filter((user) => user.role !== 'Admin'); // Exclude Admin users
+  
         const ceo = usersList.find(user => user.role === 'CEO');
-
+  
         const updatedUsers = usersList.map(user => ({
           ...user,
           organizationName: user.role === 'CEO' ? user.fullName : (ceo ? ceo.fullName : 'N/A'),
         }));
-
+  
         setUsers(updatedUsers);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -39,10 +42,10 @@ const AdminDashboard = () => {
         setLoading(false);
       }
     };
-
+  
     fetchUsers();
   }, []);
-
+  
   const handleEdit = (user) => {
     setSelectedUser(user);
     setOpen(true);
