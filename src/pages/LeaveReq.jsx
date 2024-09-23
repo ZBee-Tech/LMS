@@ -84,6 +84,7 @@ const LeaveRequestsPage = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Leave Requests</h2>
+      <div className='tableContainer'> 
       <table className={styles.table}>
         <thead>
           <tr>
@@ -131,6 +132,7 @@ const LeaveRequestsPage = () => {
           )}
         </tbody>
       </table>
+      </div>
       <ToastContainer />
     </div>
   );

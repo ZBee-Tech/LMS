@@ -127,11 +127,16 @@
 }
 
 .notificationDot {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  width: 10px;
-  height: 10px;
-  background-color: red;
+  width: 8px;
+  height: 8px;
+  background-color: red; /* or any color you prefer */
   border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: none; /* Hide by default */
+}
+
+.notificationDot.visible {
+  display: block; /* Show when there's a notification */
 }

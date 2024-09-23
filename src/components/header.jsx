@@ -13,18 +13,28 @@ const Header = () => {
 
   const userName = localStorage.getItem('fullName') || 'User';
   const userRole = localStorage.getItem('role') || 'Role';
-  const hodStatus = localStorage.getItem('HodStatus'); // Changed to directly get value from localStorage
+  const hodStatus = localStorage.getItem('HodStatus');  
+  const hRStatus = localStorage.getItem('HRStatus');  
+  const ceoStatus = localStorage.getItem('ceoStatus');  
+  const userStatus = localStorage.getItem('userStatus');  
 
   useEffect(() => {
+    const newNotifications = [];
     if (hodStatus === '0') {
-      setNotifications([
-        'You have pending leave requests to approve!',
-    
-      ]);
-    } else {
-      setNotifications([]);  
+      newNotifications.push({ message: 'You have pending leave requests to approve!', read: false });
     }
-  }, [hodStatus]); // Removed userRole as it is not needed for this logic
+    if (hRStatus === '0') {
+      newNotifications.push({ message: 'You have pending leave requests to approve!', read: false });
+    } 
+    if (ceoStatus === '0') {
+      newNotifications.push({ message: 'You have pending leave requests to approve!', read: false });
+    }
+    if(userStatus === '1'){
+      newNotifications.push({ message: 'Your leave request was approved ✅', read: false });
+    }
+
+    setNotifications(newNotifications);
+  }, [hodStatus, hRStatus, ceoStatus]);  
 
   const toggleProfileDropdown = () => {
     setProfileDropdownOpen((prev) => !prev);
@@ -34,6 +44,14 @@ const Header = () => {
     queryClient.clear();
     localStorage.clear();  
     navigate('/');
+  };
+
+  const handleNotificationClick = () => {
+    setNotificationDropdownOpen((prev) => !prev);
+    if (!notificationDropdownOpen) {
+       const updatedNotifications = notifications.map(notification => ({ ...notification, read: true }));
+      setNotifications(updatedNotifications);
+    }
   };
 
   return (
@@ -49,9 +67,9 @@ const Header = () => {
       </div>
 
       <div className="d-flex align-items-center">
-        <div className={styles.notification} onClick={() => setNotificationDropdownOpen((prev) => !prev)}>
+        <div className={styles.notification} onClick={handleNotificationClick}>
           <i className="fas fa-bell"></i>
-          <span className={styles.notificationDot}></span>
+          <span className={`${styles.notificationDot} ${notifications.some(notification => !notification.read) ? styles.visible : ''}`}></span>
         </div>
 
         <div className={styles.dropdown}>
@@ -84,7 +102,12 @@ const Header = () => {
           {notifications.length > 0 ? (
             notifications.map((notification, index) => (
               <div key={index} className={styles.notificationItem}>
-                {notification}
+                {notification.read ? (
+                  <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
+                ) : (
+                  <i className="fas fa-circle" style={{ color: 'orange' }}></i>
+                )}
+                {notification.message}
               </div>
             ))
           ) : (

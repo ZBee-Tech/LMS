@@ -60,4 +60,7 @@
     padding: 20px;
     border-radius: 8px;
   }
-  
+  .tableContainer{
+    max-width: 100%;
+    overflow-x: auto;
+  }

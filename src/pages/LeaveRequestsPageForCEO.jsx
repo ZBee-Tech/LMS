@@ -20,13 +20,18 @@ const LeaveRequestsPageForCEO = () => {
         const leaveRequestSnapshot = await getDocs(leaveRequestCollection);
         const leaveRequestData = leaveRequestSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
-         const ceoRequests = leaveRequestData.filter(request => 
+        const ceoRequests = leaveRequestData.filter(request => 
           request.HodStatus === 1 && 
           request.HrStatus === 1 && 
           request.organizationID === ceoId
         );
         
         setLeaveRequests(ceoRequests);
+        
+         const hasPendingRequests = ceoRequests.some(request => request.CeoStatus === 0);
+        if (hasPendingRequests) {
+          localStorage.setItem('ceoStatus', '0');
+        }
       } catch (error) {
         console.error('Error fetching leave requests:', error);
         toast.error('Failed to fetch leave requests.');

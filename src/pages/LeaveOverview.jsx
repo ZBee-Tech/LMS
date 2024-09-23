@@ -39,14 +39,18 @@ const LeaveTrackingForm = () => {
       const filteredRequests = leaveRequestSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
       console.log('Filtered leave requests:', filteredRequests);
-      
       setLeaveRequests(filteredRequests);
 
-       const approvedRequests = filteredRequests.filter(request => request.CeoStatus === 1);
+      // Check if any request is approved by the CEO
+      const approvedRequests = filteredRequests.filter(request => request.CeoStatus === 1);
       if (approvedRequests.length > 0) {
         const currentCount = parseInt(localStorage.getItem('approvedLeaveCount')) || 0;
         localStorage.setItem('approvedLeaveCount', currentCount + 1);
         console.log('Incremented approved leave count:', currentCount + 1);
+
+        // Save user status as 1 in local storage
+        localStorage.setItem('userStatus', '1');
+        console.log('User status saved as 1 in local storage');
       }
 
     } catch (error) {
@@ -71,7 +75,7 @@ const LeaveTrackingForm = () => {
   
     return 'Unknown Status';
   };
-  
+
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Track Leave Requests</h2>
