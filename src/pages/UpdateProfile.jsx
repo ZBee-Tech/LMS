@@ -64,8 +64,8 @@ const UpdateProfile = () => {
 
   return (
     <MDBContainer fluid className={styles.container}>
-      <MDBRow>
-        <MDBCol col='12' md='6'>
+      <MDBRow className="justify-content-center">
+        <MDBCol col='12' md='8' lg='6'>
           <div className={styles.formWrapper}>
             <h2 className={styles.header}>Update Profile</h2>
             <form onSubmit={handleUpdateProfile}>

@@ -6,16 +6,32 @@ import styles from '../assets/CSS/sidebar.module.css';
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [userRole, setUserRole] = useState('');
-
   useEffect(() => {
     const savedRole = localStorage.getItem('role');
     if (savedRole) {
       setUserRole(savedRole);
     }
+
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsCollapsed(true);  
+      } else {
+        setIsCollapsed(false); 
+      }
+    };
+
+     handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
+    if (window.innerWidth >= 768) {  
+      setIsCollapsed(!isCollapsed);
+    }
   };
 
   return (

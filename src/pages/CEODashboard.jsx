@@ -13,6 +13,7 @@ const CEODashboard = () => {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [isSaving, setIsSaving] = useState(false); // New state for saving
   const navigate = useNavigate();
   const ceoId = localStorage.getItem('userId');
 
@@ -22,9 +23,7 @@ const CEODashboard = () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'Users'));
         const usersList = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        
-         const filteredUsers = usersList.filter((user) => user.organizationId === ceoId);
-        
+        const filteredUsers = usersList.filter((user) => user.organizationId === ceoId);
         setUsers(filteredUsers);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -58,6 +57,7 @@ const CEODashboard = () => {
   const handleModalClose = () => {
     setOpen(false);
     setSelectedUser(null);
+    setIsSaving(false); // Reset saving state
   };
 
   const handleInputChange = (e) => {
@@ -70,6 +70,7 @@ const CEODashboard = () => {
 
   const handleSaveChanges = async () => {
     if (!selectedUser) return;
+    setIsSaving(true); // Start saving
     try {
       const userRef = doc(db, 'Users', selectedUser.id);
       await updateDoc(userRef, {
@@ -86,6 +87,8 @@ const CEODashboard = () => {
     } catch (error) {
       console.error('Error updating user:', error);
       toast.error('Failed to update user.');
+    } finally {
+      setIsSaving(false); // End saving
     }
   };
 
@@ -138,70 +141,77 @@ const CEODashboard = () => {
         </Table>
       )}
 
-       <Modal
-        open={open}
-        onClose={handleModalClose}
-        aria-labelledby="edit-user-modal"
-        aria-describedby="edit-user-modal-description"
-        className={styles.modalBackdrop} // Added backdrop styling
-      >
-        <Box className={styles.modalBox}>
-          <IconButton onClick={handleModalClose} className={styles.closeButton}>
-            <CloseIcon />
-          </IconButton>
-          <Typography variant="h5" id="edit-user-modal-title" className={styles.modalTitle}>
-            Edit User Details
-          </Typography>
-          {selectedUser && (
-            <>
-              <TextField
-                label="Full Name"
-                name="fullName"
-                value={selectedUser.fullName}
-                onChange={handleInputChange}
-                fullWidth
-                margin="normal"
-                className={styles.inputField}
-              />
-              <TextField
-                label="Email"
-                name="email"
-                value={selectedUser.email}
-                fullWidth
-                margin="normal"
-                disabled
-                className={styles.inputField}
-              />
-              <TextField
-                label="Role"
-                name="role"
-                value={selectedUser.role}
-                fullWidth
-                margin="normal"
-                disabled
-                className={styles.inputField}
-              />
-              <TextField
-                label="Username"
-                name="username"
-                value={selectedUser.username}
-                onChange={handleInputChange}
-                fullWidth
-                margin="normal"
-                className={styles.inputField}
-              />
-              <Box display="flex" justifyContent="flex-end" mt={3}>
-                <Button variant="contained" color="primary" onClick={handleSaveChanges} className={styles.saveButton}>
-                  Save Changes
-                </Button>   
-                <Button variant="contained" color="default" onClick={handleModalClose} className={styles.cancelButton}>
-                  Cancel
-                </Button>
-              </Box>
-            </>
-          )}
+<Modal
+  open={open}
+  onClose={handleModalClose}
+  aria-labelledby="edit-user-modal"
+  aria-describedby="edit-user-modal-description"
+  className={styles.modalBackdrop}
+>
+  <Box className={styles.modalBox}>
+    <IconButton onClick={handleModalClose} className={styles.closeButton} style={{ position: 'absolute', top: 16, left: 16 }}>
+      <CloseIcon />
+    </IconButton>
+    <Typography variant="h5" id="edit-user-modal-title" className={styles.modalTitle} style={{ marginTop: '48px' }}>
+      Edit User Details
+    </Typography>
+    {selectedUser && (
+      <>
+        <TextField
+          label="Full Name"
+          name="fullName"
+          value={selectedUser.fullName}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+          className={styles.inputField}
+        />
+        <TextField
+          label="Email"
+          name="email"
+          value={selectedUser.email}
+          fullWidth
+          margin="normal"
+          disabled
+          className={styles.inputField}
+        />
+        <TextField
+          label="Role"
+          name="role"
+          value={selectedUser.role}
+          fullWidth
+          margin="normal"
+          disabled
+          className={styles.inputField}
+        />
+        <TextField
+          label="Username"
+          name="username"
+          value={selectedUser.username}
+          onChange={handleInputChange}
+          fullWidth
+          margin="normal"
+          className={styles.inputField}
+        />
+        <Box display="flex" justifyContent="flex-end" mt={3}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSaveChanges}
+            className={styles.saveButton}
+            disabled={isSaving}
+          >
+            {isSaving ? <CircularProgress size={24} /> : 'Save Changes'}
+          </Button> &nbsp;
+          <Button variant="contained" color="default" onClick={handleModalClose} className={styles.cancelButton}>
+            Cancel
+          </Button>
         </Box>
-      </Modal>
+      </>
+    )}
+  </Box>
+</Modal>
+
 
       <ToastContainer />
     </Container>

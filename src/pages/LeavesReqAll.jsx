@@ -100,10 +100,8 @@ const LeavesReq = () => {
   };
 
   return (
-    <Paper style={{ padding: '20px' }}>
-      <Typography variant="h4" gutterBottom>
-        Leave Requests
-      </Typography>
+    <div style={{ padding: '20px' }}>
+ 
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         <FormControl style={{ marginRight: '20px', minWidth: '200px' }}>
           <p>Organization</p>
@@ -138,7 +136,7 @@ const LeavesReq = () => {
         </FormControl>
 
         <CSVLink data={exportData} filename="leave_requests.csv">
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" style={{ marginTop:'42px' }}>
             Export as CSV
           </Button>
         </CSVLink>
@@ -184,7 +182,7 @@ const LeavesReq = () => {
           ))}
         </TableBody>
       </Table>
-    </Paper>
+    </div>
   );
 };
 
