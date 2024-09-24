@@ -19,6 +19,7 @@ const LeaveRequestForm = () => {
   const [leaveLimits, setLeaveLimits] = useState({});
   const [allUsersLeaveLimits, setAllUsersLeaveLimits] = useState([]);
   const [daysRequested, setDaysRequested] = useState(0);
+  const [sundaysExcluded, setSundaysExcluded] = useState(0);
   const [Check, setCheck] = useState('');
   const [organizationID, setorganizationid] = useState('');
 
@@ -88,19 +89,24 @@ const LeaveRequestForm = () => {
   useEffect(() => {
     if (startDate && endDate) {
       let totalDays = 0;
+      let sundaysCount = 0;
       let currentDate = new Date(startDate);
 
       while (currentDate <= endDate) {
         const dayOfWeek = currentDate.getDay();
         if (dayOfWeek !== 0) { // Exclude Sundays (0 is Sunday)
           totalDays++;
+        } else {
+          sundaysCount++; // Count Sundays
         }
         currentDate.setDate(currentDate.getDate() + 1);
       }
 
       setDaysRequested(totalDays);
+      setSundaysExcluded(sundaysCount);
     } else {
       setDaysRequested(0);
+      setSundaysExcluded(0);
     }
   }, [startDate, endDate]);
 
@@ -221,6 +227,7 @@ const LeaveRequestForm = () => {
 
           <div className={styles.formGroup}>
             <p className={styles.label}>Total Days Requested: {daysRequested}</p>
+            <p className={styles.label}>Sundays Excluded: {sundaysExcluded}</p>
           </div>
 
           <div className={styles.submitWrapper}>
