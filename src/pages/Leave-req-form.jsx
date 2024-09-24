@@ -18,7 +18,7 @@ const LeaveRequestForm = () => {
   const [fullName, setFullName] = useState('');
   const [leaveLimits, setLeaveLimits] = useState({});
   const [allUsersLeaveLimits, setAllUsersLeaveLimits] = useState([]);
-  const [daysRequested, setDaysRequested] = useState(0);  
+  const [daysRequested, setDaysRequested] = useState(0);
   const [Check, setCheck] = useState('');
   const [organizationID, setorganizationid] = useState('');
 
@@ -31,7 +31,6 @@ const LeaveRequestForm = () => {
     const savedUserId = localStorage.getItem('userId');
     const savedFullName = localStorage.getItem('fullName');
     const organizationid = localStorage.getItem('organizationId');
-
 
     if (savedRole && savedUserId && savedFullName) {
       setRole(savedRole);
@@ -88,8 +87,18 @@ const LeaveRequestForm = () => {
 
   useEffect(() => {
     if (startDate && endDate) {
-      const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-      setDaysRequested(days);
+      let totalDays = 0;
+      let currentDate = new Date(startDate);
+
+      while (currentDate <= endDate) {
+        const dayOfWeek = currentDate.getDay();
+        if (dayOfWeek !== 0) { // Exclude Sundays (0 is Sunday)
+          totalDays++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      setDaysRequested(totalDays);
     } else {
       setDaysRequested(0);
     }
@@ -97,7 +106,7 @@ const LeaveRequestForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (daysRequested > Check) {
       toast.error(`Please apply according to your leave limit. Your limit for leaves was ${Check}.`);
       return;
@@ -106,23 +115,23 @@ const LeaveRequestForm = () => {
       toast.error('Please select both start and end dates.');
       return;
     }
-  
+
     if (endDate < startDate) {
       toast.error('End date must be after start date.');
       return;
     }
-  
+
     const leaveLimit = leaveLimits[leaveType];
     if (leaveLimit !== undefined && daysRequested > leaveLimit) {
       toast.error(`You cannot request more than ${leaveLimit} days of ${leaveType}.`);
       return;
     }
-  
+
     const createdAt = new Date();
     const modifiedAt = new Date();
     const createdBy = userId;
     const modifiedBy = userId;
-  
+
     const leaveRequestData = {
       leaveType,
       startDate,
@@ -141,11 +150,11 @@ const LeaveRequestForm = () => {
       CeoStatus: 0,
       organizationID,
     };
-  
+
     try {
       await addDoc(collection(db, 'leaveRequests'), leaveRequestData);
       toast.success('Leave request submitted successfully!');
-  
+
       setLeaveType('');
       setStartDate(null);
       setEndDate(null);
@@ -155,7 +164,6 @@ const LeaveRequestForm = () => {
       toast.error('Failed to submit leave request.');
     }
   };
-  
 
   return (
     <div className={styles.container}>
