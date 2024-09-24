@@ -12,7 +12,7 @@ const AddUser = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState(Math.random().toString(36).slice(2));
   const [department, setDepartment] = useState('');
   const [hods, setHods] = useState([]);
   const [selectedHod, setSelectedHod] = useState('');

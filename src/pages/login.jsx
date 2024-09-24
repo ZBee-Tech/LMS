@@ -10,7 +10,7 @@ import { getDoc, doc } from 'firebase/firestore';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState(Math.random().toString(36).slice(2));
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -99,10 +99,10 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
               />
-              <div className="d-flex justify-content-between mb-4">
+              {/* <div className="d-flex justify-content-between mb-4">
                 <MDBCheckbox name='rememberMe' id='rememberMe' label='Remember me' />
                 <Link to="/forgot" className="link-danger">Forgot password?</Link>
-              </div>
+              </div> */}
               <div className='text-center text-md-start mt-4 pt-2'>
                 <button 
                   className={`${styles.loginButton} mb-0 px-5`} 
