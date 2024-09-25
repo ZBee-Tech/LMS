@@ -84,28 +84,29 @@ const LeaveRequestsPageForCEO = () => {
   const getStatusLabel = (status) => {
     switch (status) {
       case 1:
-        return <span className={`${styles.status} ${styles.approved}`}>Approved by CEO</span>;
+        return <span className={`${styles.status} ${styles.approved}`}>Approuvé par le PDG</span>;
       case -1:
-        return <span className={`${styles.status} ${styles.declined}`}>Rejected by CEO</span>;
+        return <span className={`${styles.status} ${styles.declined}`}>Rejeté par le PDG</span>;
       default:
-        return <span className={`${styles.status} ${styles.pending}`}>Pending CEO Approval</span>;
+        return <span className={`${styles.status} ${styles.pending}`}>En attente de l'approbation du PDG</span>;
     }
+    
   };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>Leave Requests for CEO</h2>
+      <h2 className={styles.heading}>Demandes de Congé pour le PDG</h2>
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Leave Type</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Reason</th>
-            <th>Requested By</th>
-            <th>HOD Approved</th>
-            <th>HR Approved</th>
-            <th>Status</th>
+            <th>Type de Congé</th>
+            <th>Date de Début</th>
+            <th>Date de Fin</th>
+            <th>Raison</th>
+            <th>Demandé Par</th>
+            <th>Approuvé par le HOD</th>
+            <th>Approuvé par les RH</th>
+            <th>Statut</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -117,8 +118,8 @@ const LeaveRequestsPageForCEO = () => {
               <td>{new Date(request.endDate.seconds * 1000).toLocaleDateString()}</td>
               <td>{request.reason || 'N/A'}</td>
               <td>{request.fullName}</td>
-              <td>{request.HodStatus === 1 ? 'Yes' : 'No'}</td>
-              <td>{request.HrStatus === 1 ? 'Yes' : 'No'}</td>
+              <td>{request.HodStatus === 1 ? 'Oui' : 'Non'}</td>
+              <td>{request.HrStatus === 1 ? 'Oui' : 'Non'}</td>
               <td>{getStatusLabel(request.Status)}</td>
               <td>
                 {request.CeoStatus === 0 && (
@@ -126,12 +127,12 @@ const LeaveRequestsPageForCEO = () => {
                     <button 
                       className={styles.approveButton} 
                       onClick={() => handleApprove(request.id)}>
-                      Approve
+                      Approuver
                     </button>
                     <button 
                       className={styles.rejectButton} 
                       onClick={() => handleReject(request.id)}>
-                      Reject
+                      Rejeter
                     </button>
                   </>
                 )}
@@ -143,6 +144,7 @@ const LeaveRequestsPageForCEO = () => {
       <ToastContainer />
     </div>
   );
+  
 };
 
 export default LeaveRequestsPageForCEO;

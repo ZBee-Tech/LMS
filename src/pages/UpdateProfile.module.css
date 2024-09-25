@@ -3,14 +3,17 @@
   justify-content: center;
   align-items: center;
   padding: 2rem;
+  height: 100vh;  
 }
 
 .formWrapper {
-  width: 100%;
+  width: 300px;
   max-width: 600px;
   padding: 2rem;
   background: #fff;
   border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);  
+  margin-right: 400px;
 }
 
 .header {
@@ -46,9 +49,12 @@
   cursor: not-allowed;
 }
 
+/* Media Queries for Better Responsiveness */
+
+/* Extra small devices (phones, less than 576px) */
 @media (max-width: 576px) {
   .formWrapper {
-    padding: 1.5rem;
+    padding: 1rem; /* Reduce padding on smaller screens */
   }
 
   .header {
@@ -57,5 +63,43 @@
 
   .button {
     font-size: 1rem;
+  }
+}
+
+ @media (max-width: 768px) {
+  .formWrapper {
+    padding: 1.5rem;
+    margin-left: 380px;
+
+  }
+
+  .header {
+    font-size: 1.6rem;
+  }
+
+  .button {
+    font-size: 1.05rem;
+  }
+}
+
+/* Medium devices (tablets, less than 992px) */
+@media (max-width: 992px) {
+  .formWrapper {
+    padding: 1.75rem;
+  }
+
+  .header {
+    font-size: 1.7rem;
+  }
+
+  .button {
+    font-size: 1.08rem;
+  }
+}
+
+/* Large devices (desktops, less than 1200px) */
+@media (max-width: 1200px) {
+  .formWrapper {
+    max-width: 500px;
   }
 }

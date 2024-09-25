@@ -29,7 +29,7 @@ const Header = () => {
         if (userRole === 'HR Manager') {
           leaveRequestsQuery = query(leaveRequestsRef, where('HrStatus', '==', 0), where('organizationID', '==', organizationId));
         } else if (userRole === 'CEO') {
-          leaveRequestsQuery = query(leaveRequestsRef, where('CeoStatus', '==', 0), where('organizationID', '==', organizationId), where('HrStatus', '==', 1));
+          leaveRequestsQuery = query(leaveRequestsRef, where('CeoStatus', '==', 0),  where('HrStatus', '==', 1));
         } else if (userRole === 'HOD') {
           leaveRequestsQuery = query(leaveRequestsRef, where('HodStatus', '==', 0), where('organizationID', '==', organizationId));
         } else if (userRole === 'Employee') {
@@ -45,10 +45,9 @@ const Header = () => {
           console.log('Leave Request:', data);
 
           return {
-            message: userRole === "Employee" ? `Votre demande de congé a été approuvée pour la raison ${data.leaveType}` : `Demande de congé de ${data.fullName}`,
+            message: userRole === "Employee" ?  `Your leave request has been Approved for reasson  ${data.leaveType}` : `Leave request from ${data.fullName}`,
             read: false,
-          };
-          });
+          };});
           
         setNotifications(allLeaveRequests);
       } catch (error) {

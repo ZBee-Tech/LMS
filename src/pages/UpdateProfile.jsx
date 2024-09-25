@@ -67,11 +67,11 @@ const UpdateProfile = () => {
       <MDBRow className="justify-content-center">
         <MDBCol col='12' md='8' lg='6'>
           <div className={styles.formWrapper}>
-            <h2 className={styles.header}>Update Profile</h2>
+            <h2 className={styles.header}>Mettre à Jour le Profil</h2>
             <form onSubmit={handleUpdateProfile}>
               <MDBInput
                 wrapperClass={styles.input}
-                label='Full Name'
+                label='Nom Complet'
                 id='name'
                 type='text'
                 size="lg"
@@ -81,7 +81,7 @@ const UpdateProfile = () => {
               />
               <MDBInput
                 wrapperClass={styles.input}
-                label='New Password'
+                label='Nouveau Mot de Passe'
                 id='password'
                 type='password'
                 size="lg"
@@ -95,7 +95,7 @@ const UpdateProfile = () => {
                 className={styles.button}
                 disabled={loading}
               >
-                {loading ? 'Updating...' : 'Update Profile'}
+                {loading ? 'Mise à jour...' : 'Mettre à Jour le Profil'}
               </button>
             </form>
           </div>
@@ -104,6 +104,7 @@ const UpdateProfile = () => {
       <ToastContainer />
     </MDBContainer>
   );
+
 };
 
 export default UpdateProfile;

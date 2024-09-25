@@ -95,7 +95,7 @@ const CEODashboard = () => {
   return (
     <Container className={styles.dashboardContainer}>
       <Typography variant="h4" align="center" gutterBottom>
-        CEO Dashboard
+        Tableau de Bord du PDG
       </Typography>
       {loading ? (
         <CircularProgress className={styles.loader} />
@@ -103,10 +103,10 @@ const CEODashboard = () => {
         <Table className={styles.userTable}>
           <TableHead>
             <TableRow>
-              <TableCell>Full Name</TableCell>
+              <TableCell>Nom Complet</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Username</TableCell>
+              <TableCell>Rôle</TableCell>
+              <TableCell>Nom d'utilisateur</TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -124,7 +124,7 @@ const CEODashboard = () => {
                     onClick={() => handleEdit(user)}
                     className={styles.actionButton}
                   >
-                    Edit
+                    Éditer
                   </Button> &nbsp;
                   <Button
                     variant="contained"
@@ -132,7 +132,7 @@ const CEODashboard = () => {
                     onClick={() => handleDelete(user.id)}
                     className={styles.actionButton}
                   >
-                    Delete
+                    Supprimer
                   </Button>
                 </TableCell>
               </TableRow>
@@ -140,82 +140,82 @@ const CEODashboard = () => {
           </TableBody>
         </Table>
       )}
-
-<Modal
-  open={open}
-  onClose={handleModalClose}
-  aria-labelledby="edit-user-modal"
-  aria-describedby="edit-user-modal-description"
-  className={styles.modalBackdrop}
->
-  <Box className={styles.modalBox}>
-    <IconButton onClick={handleModalClose} className={styles.closeButton} style={{ position: 'absolute', top: 16, left: 16 }}>
-      <CloseIcon />
-    </IconButton>
-    <Typography variant="h5" id="edit-user-modal-title" className={styles.modalTitle} style={{ marginTop: '48px' }}>
-      Edit User Details
-    </Typography>
-    {selectedUser && (
-      <>
-        <TextField
-          label="Full Name"
-          name="fullName"
-          value={selectedUser.fullName}
-          onChange={handleInputChange}
-          fullWidth
-          margin="normal"
-          className={styles.inputField}
-        />
-        <TextField
-          label="Email"
-          name="email"
-          value={selectedUser.email}
-          fullWidth
-          margin="normal"
-          disabled
-          className={styles.inputField}
-        />
-        <TextField
-          label="Role"
-          name="role"
-          value={selectedUser.role}
-          fullWidth
-          margin="normal"
-          disabled
-          className={styles.inputField}
-        />
-        <TextField
-          label="Username"
-          name="username"
-          value={selectedUser.username}
-          onChange={handleInputChange}
-          fullWidth
-          margin="normal"
-          className={styles.inputField}
-        />
-        <Box display="flex" justifyContent="flex-end" mt={3}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSaveChanges}
-            className={styles.saveButton}
-            disabled={isSaving}
-          >
-            {isSaving ? <CircularProgress size={24} /> : 'Save Changes'}
-          </Button> &nbsp;
-          <Button variant="contained" color="default" onClick={handleModalClose} className={styles.cancelButton}>
-            Cancel
-          </Button>
+  
+      <Modal
+        open={open}
+        onClose={handleModalClose}
+        aria-labelledby="edit-user-modal"
+        aria-describedby="edit-user-modal-description"
+        className={styles.modalBackdrop}
+      >
+        <Box className={styles.modalBox}>
+          <IconButton onClick={handleModalClose} className={styles.closeButton} style={{ position: 'absolute', top: 16, left: 16 }}>
+            <CloseIcon />
+          </IconButton>
+          <Typography variant="h5" id="edit-user-modal-title" className={styles.modalTitle} style={{ marginTop: '48px' }}>
+            Modifier les Détails de l'Utilisateur
+          </Typography>
+          {selectedUser && (
+            <>
+              <TextField
+                label="Nom Complet"
+                name="fullName"
+                value={selectedUser.fullName}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+                className={styles.inputField}
+              />
+              <TextField
+                label="Email"
+                name="email"
+                value={selectedUser.email}
+                fullWidth
+                margin="normal"
+                disabled
+                className={styles.inputField}
+              />
+              <TextField
+                label="Rôle"
+                name="role"
+                value={selectedUser.role}
+                fullWidth
+                margin="normal"
+                disabled
+                className={styles.inputField}
+              />
+              <TextField
+                label="Nom d'utilisateur"
+                name="username"
+                value={selectedUser.username}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+                className={styles.inputField}
+              />
+              <Box display="flex" justifyContent="flex-end" mt={3}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSaveChanges}
+                  className={styles.saveButton}
+                  disabled={isSaving}
+                >
+                  {isSaving ? <CircularProgress size={24} /> : 'Sauvegarder les Modifications'}
+                </Button> &nbsp;
+                <Button variant="contained" color="default" onClick={handleModalClose} className={styles.cancelButton}>
+                  Annuler
+                </Button>
+              </Box>
+            </>
+          )}
         </Box>
-      </>
-    )}
-  </Box>
-</Modal>
-
-
+      </Modal>
+  
       <ToastContainer />
     </Container>
   );
+  
 };
 
 export default CEODashboard;
