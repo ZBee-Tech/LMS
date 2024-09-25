@@ -45,9 +45,10 @@ const Header = () => {
           console.log('Leave Request:', data);
 
           return {
-            message: userRole === "Employee" ?  `Your leave request has been Approved for reasson  ${data.leaveType}` : `Leave request from ${data.fullName}`,
+            message: userRole === "Employee" ? `Votre demande de congé a été approuvée pour la raison ${data.leaveType}` : `Demande de congé de ${data.fullName}`,
             read: false,
-          };});
+          };
+          });
           
         setNotifications(allLeaveRequests);
       } catch (error) {

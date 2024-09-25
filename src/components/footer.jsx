@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className={styles.footer}>
       <div className={styles.footerContent}>
         <div className={styles.footerLeft}>
-          <p>&copy; 2024 My App. All rights reserved.</p>
+          <p>&copy; 2024 Mon application. Tous droits réservés.</p>
         </div>
      
      

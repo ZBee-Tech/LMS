@@ -11,7 +11,7 @@ import { setDoc, doc } from "firebase/firestore";
 const SignupPage = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState(Math.random().toString(36).slice(2));
+  const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,16 +22,14 @@ const SignupPage = () => {
     e.preventDefault();
 
     if (!termsAccepted) {
-      toast.error('You must agree to the terms and conditions.');
+      toast.error('Vous devez accepter les termes et conditions.');
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match.');
+      toast.error('Les mots de passe ne correspondent pas.');
       return;
     }
-
-   
 
     try {
       setLoading(true);
@@ -42,15 +40,15 @@ const SignupPage = () => {
       await setDoc(doc(db, "Users", user.uid), {
         email: user.email,
         fullName: fullName,
-        role: "CEO"
+        role: "PDG"
       });
 
       await sendEmailVerification(user);
 
       setVerificationSent(true);
-      toast.success('Signup successful! Please check your email to verify your account.');
+      toast.success('Inscription réussie! Veuillez vérifier votre email pour valider votre compte.');
 
-       setFullName('');
+      setFullName('');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
@@ -58,8 +56,8 @@ const SignupPage = () => {
       setTermsAccepted(false);
 
     } catch (err) {
-      console.error('Error during signup:', err);
-      toast.error('Error during signup: ' + err.message);
+      console.error('Erreur lors de l\'inscription:', err);
+      toast.error('Erreur lors de l\'inscription: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -73,16 +71,16 @@ const SignupPage = () => {
             <img
               src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
               className="img-fluid"
-              alt="Sample image"
+              alt="Image d'exemple"
             />
           </MDBCol>
 
           <MDBCol col='4' md='6'>
-            <h2 className="text-center mb-4">Sign Up</h2>
+            <h2 className="text-center mb-4">S'inscrire</h2>
             <form onSubmit={handleSubmit} className={styles.formContainer}>
               <MDBInput
                 wrapperClass='mb-4'
-                label='Full Name'
+                label='Nom et prénom'
                 id='fullName'
                 type='text'
                 size="lg"
@@ -91,7 +89,7 @@ const SignupPage = () => {
               />
               <MDBInput
                 wrapperClass='mb-4'
-                label='Email address'
+                label='Adresse e-mail'
                 id='email'
                 type='email'
                 size="lg"
@@ -100,7 +98,7 @@ const SignupPage = () => {
               />
               <MDBInput
                 wrapperClass='mb-4'
-                label='Password'
+                label='Mot de passe'
                 id='password'
                 type='password'
                 size="lg"
@@ -109,35 +107,35 @@ const SignupPage = () => {
               />
               <MDBInput
                 wrapperClass='mb-4'
-                label='Confirm Password'
+                label='Confirmer le mot de passe'
                 id='confirmPassword'
                 type='password'
                 size="lg"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-          
+
               <div className="d-flex justify-content-between mb-4">
                 <MDBCheckbox
                   name='terms'
                   value={termsAccepted}
                   id='termsCheckbox'
-                  label='I agree to the terms and conditions'
+                  label='accepte les termes et conditions'
                   onChange={(e) => setTermsAccepted(e.target.checked)}
                 />
               </div>
               <div className='text-center text-md-start mt-4 pt-2'>
                 <button type="submit" className={styles.btn} size='lg' disabled={loading || verificationSent}>
-                  {loading ? 'Signing Up...' : 'Sign Up'}
+                  {loading ? 'Inscription en cours...' : 'S\'inscrire'}
                 </button>
                 <p className="small fw-bold mt-2 pt-1 mb-2">
-                  Already have an account? <Link to="/" className="link-danger">Login</Link>
+                  Vous avez déjà un compte? <Link to="/" className="link-danger">Connexion</Link>
                 </p>
               </div>
             </form>
             {verificationSent && (
               <div className="text-center mt-4">
-                <p>A verification email has been sent. Please check your email.</p>
+                <p>Un email de vérification a été envoyé. Veuillez vérifier votre boîte de réception.</p>
               </div>
             )}
           </MDBCol>
@@ -147,5 +145,5 @@ const SignupPage = () => {
     </>
   );
 };
- 
+
 export default SignupPage;

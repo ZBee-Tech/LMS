@@ -76,22 +76,22 @@ const LeaveTrackingForm = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>Track Leave Requests</h2>
+      <h2 className={styles.heading}>Suivre les demandes de congé</h2>
       
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Leave Type</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Reason</th>
-            <th>Status</th>
+            <th>Type de congé</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+            <th>Raison</th>
+            <th>Statut</th>
           </tr>
         </thead>
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan="5">Loading...</td>
+              <td colSpan="5">Chargement...</td>
             </tr>
           ) : leaveRequests.length > 0 ? (
             leaveRequests.map((request) => (
@@ -105,7 +105,7 @@ const LeaveTrackingForm = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="5">No leave requests found for your ID.</td>
+              <td colSpan="5">Aucune demande de congé trouvée pour votre ID.</td>
             </tr>
           )}
         </tbody>
@@ -113,6 +113,7 @@ const LeaveTrackingForm = () => {
       <ToastContainer />
     </div>
   );
+  
 };
 
 export default LeaveTrackingForm;

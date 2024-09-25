@@ -10,7 +10,7 @@ import { getDoc, doc } from 'firebase/firestore';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState(Math.random().toString(36).slice(2));
+  const [password, setPassword] = useState();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ const LoginPage = () => {
       const user = userCredential.user;
 
       if (!user.emailVerified) {
-        toast.error('Please verify your email address before logging in.');
+        toast.error('Veuillez vérifier votre adresse e-mail avant de vous connecter.');
         setLoading(false);
         return;
       }
@@ -54,11 +54,11 @@ const LoginPage = () => {
                  role === "CEO" ? '/ceohome' : 
                  '/adminhome');
       } else {
-        toast.error('User not found in Firestore.');
+        toast.error('Utilisateur introuvable dans Firestore.');
       }
     } catch (err) {
       console.error('Error during login:', err);
-      toast.error('Error during login: ' + err.message);
+      toast.error('Erreur lors de la connexion : ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -77,11 +77,11 @@ const LoginPage = () => {
           </MDBCol>
 
           <MDBCol md='6'>
-            <h2 className="text-center mb-4">Login</h2>
+            <h2 className="text-center mb-4">Se connecter</h2>
             <form onSubmit={handleLogin} className={styles.formContainer}>
               <MDBInput
                 wrapperClass='mb-4'
-                label='Email address'
+                label='Adresse email'
                 id='email'
                 type='email'
                 size="lg"
@@ -91,7 +91,7 @@ const LoginPage = () => {
               />
               <MDBInput
                 wrapperClass='mb-4'
-                label='Password'
+                label='Mot de passe'
                 id='password'
                 type='password'
                 size="lg"
@@ -99,10 +99,9 @@ const LoginPage = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
               />
-              {/* <div className="d-flex justify-content-between mb-4">
-                <MDBCheckbox name='rememberMe' id='rememberMe' label='Remember me' />
-                <Link to="/forgot" className="link-danger">Forgot password?</Link>
-              </div> */}
+              <div className="d-flex justify-content-between mb-4">
+                 <Link to="/forgot" className="link-danger">Mot de passe oublié ?</Link>
+              </div>
               <div className='text-center text-md-start mt-4 pt-2'>
                 <button 
                   className={`${styles.loginButton} mb-0 px-5`} 
@@ -110,10 +109,10 @@ const LoginPage = () => {
                   type="submit" 
                   disabled={loading}
                 >
-                  {loading ? 'Logging In...' : 'Login'}
+                  {loading ? 'Connexion...' : 'Connexion'}
                 </button>
                 <p className="small fw-bold mt-2 pt-1 mb-2 "> 
-                  Don't have an account? <Link to="/signup" className="link-danger">Register</Link>
+                Vous n'avez pas de compte ? <Link to="/signup" className="link-danger">Registre</Link>
                 </p>
               </div>
             </form>

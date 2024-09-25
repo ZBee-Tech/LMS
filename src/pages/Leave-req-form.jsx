@@ -94,10 +94,10 @@ const LeaveRequestForm = () => {
 
       while (currentDate <= endDate) {
         const dayOfWeek = currentDate.getDay();
-        if (dayOfWeek !== 0) { // Exclude Sundays (0 is Sunday)
+        if (dayOfWeek !== 0) {  
           totalDays++;
         } else {
-          sundaysCount++; // Count Sundays
+          sundaysCount++;  
         }
         currentDate.setDate(currentDate.getDate() + 1);
       }
@@ -173,72 +173,73 @@ const LeaveRequestForm = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.formWrapper}>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.formGroup}>
-            <label htmlFor="leaveType" className={styles.label}>Type of Leave</label>
-            <select
-              id="leaveType"
-              className={styles.select}
-              value={leaveType}
-              onChange={(e) => setLeaveType(e.target.value)}
-            >
-              <option value="">Select type of leave</option>
-              {leaveTypes.map(({ id, leaveType }) => (
-                <option key={id} value={leaveType}>{leaveType}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className={styles.formGroup}>
-            <label htmlFor="startDate" className={styles.label}>Start Date</label>
-            <DatePicker
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              className={styles.input}
-              dateFormat="yyyy/MM/dd"
-              placeholderText="Select start date"
-              minDate={today} // Allow today as start date
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label htmlFor="endDate" className={styles.label}>End Date</label>
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              className={styles.input}
-              dateFormat="yyyy/MM/dd"
-              placeholderText="Select end date"
-              minDate={startDate ? startDate : today} // Allow start date or today as end date
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label htmlFor="reason" className={styles.label}>Reason (Optional)</label>
-            <textarea
-              id="reason"
-              rows="4"
-              className={styles.textarea}
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <p className={styles.label}>Total Days Requested: {daysRequested}</p>
-            <p className={styles.label}>Sundays Excluded: {sundaysExcluded}</p>
-          </div>
-
-          <div className={styles.submitWrapper}>
-            <button type="submit" className={styles.submitButton}>
-              Submit Request
-            </button>
-          </div>
-        </form>
-      </div>
-      <ToastContainer />
+    <div className={styles.formWrapper}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.formGroup}>
+          <label htmlFor="leaveType" className={styles.label}>Type de congé</label>
+          <select
+            id="leaveType"
+            className={styles.select}
+            value={leaveType}
+            onChange={(e) => setLeaveType(e.target.value)}
+          >
+            <option value="">Sélectionner le type de congé</option>
+            {leaveTypes.map(({ id, leaveType }) => (
+              <option key={id} value={leaveType}>{leaveType}</option>
+            ))}
+          </select>
+        </div>
+  
+        <div className={styles.formGroup}>
+          <label htmlFor="startDate" className={styles.label}>Date de début</label>
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            className={styles.input}
+            dateFormat="yyyy/MM/dd"
+            placeholderText="Sélectionner la date de début"
+            minDate={today} // Autoriser aujourd'hui comme date de début
+          />
+        </div>
+  
+        <div className={styles.formGroup}>
+          <label htmlFor="endDate" className={styles.label}>Date de fin</label>
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            className={styles.input}
+            dateFormat="yyyy/MM/dd"
+            placeholderText="Sélectionner la date de fin"
+            minDate={startDate ? startDate : today} // Autoriser la date de début ou aujourd'hui comme date de fin
+          />
+        </div>
+  
+        <div className={styles.formGroup}>
+          <label htmlFor="reason" className={styles.label}>Raison (Facultatif)</label>
+          <textarea
+            id="reason"
+            rows="4"
+            className={styles.textarea}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+          />
+        </div>
+  
+        <div className={styles.formGroup}>
+          <p className={styles.label}>Total des jours demandés : {daysRequested}</p>
+          <p className={styles.label}>Dimanches exclus : {sundaysExcluded}</p>
+        </div>
+  
+        <div className={styles.submitWrapper}>
+          <button type="submit" className={styles.submitButton}>
+            Soumettre la demande
+          </button>
+        </div>
+      </form>
     </div>
+    <ToastContainer />
+  </div>
+  
   );
 };
 

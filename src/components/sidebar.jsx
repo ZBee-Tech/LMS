@@ -45,19 +45,19 @@ const Sidebar = () => {
             <li>
               <Link to="/ceohome">
                 <FaHome className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Home</span>}
+                {!isCollapsed && <span className={styles.label}>Accueil</span>}
               </Link>
             </li>
             <li>
               <Link to="/addusers">
                 <FaUserPlus className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Add Users</span>}
+                {!isCollapsed && <span className={styles.label}>Ajouter des utilisateurs</span>}
               </Link>
             </li>
             <li>
               <Link to="/leavesDataCEO">
                 <FaEnvelope className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Leave Requests</span>}
+                {!isCollapsed && <span className={styles.label}>Demandes de congé</span>}
               </Link>
             </li>
           </>
@@ -68,13 +68,13 @@ const Sidebar = () => {
             <li>
               <Link to="/leaveform">
                 <FaFileAlt className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Leave Form</span>}
+                {!isCollapsed && <span className={styles.label}>Formulaire de congé</span>}
               </Link>
             </li>
             <li>
               <Link to="/leaveoverview">
                 <FaClipboardList className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Leave Requests</span>}
+                {!isCollapsed && <span className={styles.label}>Demandes de congé</span>}
               </Link>
             </li>
           </>
@@ -85,7 +85,7 @@ const Sidebar = () => {
             <li>
               <Link to="/leavesDataHOD">
                 <FaClipboardList className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Leave Requests</span>}
+                {!isCollapsed && <span className={styles.label}>Demandes de congé</span>}
               </Link>
             </li>
           </>
@@ -96,13 +96,13 @@ const Sidebar = () => {
             <li>
               <Link to="/adminhome">
                 <FaUsers className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Users</span>}
+                {!isCollapsed && <span className={styles.label}>Utilisateurs</span>}
               </Link>
             </li>
             <li>
               <Link to="/leavereqsall">
                 <FaCalendarAlt className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Leave Requests</span>}
+                {!isCollapsed && <span className={styles.label}>Demandes de congé</span>}
               </Link>
             </li>
           </>
@@ -113,25 +113,25 @@ const Sidebar = () => {
             <li>
               <Link to="/HomeHR">
                 <FaHome className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Home</span>}
+                {!isCollapsed && <span className={styles.label}>Accueil</span>}
               </Link>
             </li>
             <li>
               <Link to="/addHOD">
                 <FaUserTie className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Add HOD/Employee</span>}
+                {!isCollapsed && <span className={styles.label}>Ajouter HOD/Employé</span>}
               </Link>
             </li>
             <li>
               <Link to="/leavesDataHR">
                 <FaEnvelope className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Leave Requests HR</span>}
+                {!isCollapsed && <span className={styles.label}>Demandes de congé HR</span>}
               </Link>
             </li>
             <li>
               <Link to="/addleavetype">
                 <FaCalendarAlt className={styles.icon} />
-                {!isCollapsed && <span className={styles.label}>Add Leave Type</span>}
+                {!isCollapsed && <span className={styles.label}>Ajouter un type de congé</span>}
               </Link>
             </li>
           </>
