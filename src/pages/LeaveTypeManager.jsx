@@ -91,32 +91,21 @@ const LeaveTypeManager = () => {
   return (
     <Container component="main" maxWidth="md">
       <Typography variant="h6" align="center" gutterBottom>
-        Add New Leave Type
+        Ajouter un Nouveau Type de Congé
       </Typography>
       <form onSubmit={handleAddLeaveType}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Leave Type"
+              label="Type de Congé"
               value={leaveType}
               onChange={(e) => setLeaveType(e.target.value)}
               variant="outlined"
               required
             />
           </Grid>
-           { /* <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Limit (Days)"
-              type="number"
-              value={limit}
-              onChange={(e) => setLimit(e.target.value)}
-              variant="outlined"
-              required
-            />
-          </Grid> */ }
-
+  
           <Grid item xs={12}>
             <Button
               type="submit"
@@ -125,7 +114,7 @@ const LeaveTypeManager = () => {
               color="primary"
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} /> : 'Add Leave Type'}
+              {loading ? <CircularProgress size={24} /> : 'Ajouter un Type de Congé'}
             </Button>
           </Grid>
         </Grid>
@@ -136,7 +125,7 @@ const LeaveTypeManager = () => {
         leaveTypes.length > 0 ?
           <>
             <Typography variant="h6" align="center" gutterBottom>
-              Leave Types
+              Types de Congé
             </Typography>
             <Grid container spacing={2}>
               {leaveTypes.map(({ id, leaveType, limit }) => (
@@ -144,7 +133,7 @@ const LeaveTypeManager = () => {
                   <Grid container alignItems="center" spacing={2}>
                     <Grid item xs={6}>
                       <Typography variant="body1">{leaveType}</Typography>
-                      {/* <Typography variant="body2">Limit: {limit} days</Typography> */}
+                      {/* <Typography variant="body2">Limite : {limit} jours</Typography> */}
                     </Grid>
                     <Grid item xs={6} container justifyContent="flex-end" spacing={1}>
                       <Grid item>
@@ -153,7 +142,7 @@ const LeaveTypeManager = () => {
                           color="secondary"
                           onClick={() => handleDeleteLeaveType(id)}
                         >
-                          Delete
+                          Supprimer
                         </Button>
                       </Grid>
                     </Grid>
@@ -163,11 +152,11 @@ const LeaveTypeManager = () => {
             </Grid>
           </> : ''
       }
-
-
+  
       <ToastContainer />
     </Container>
   );
+  
 };
 
 export default LeaveTypeManager;

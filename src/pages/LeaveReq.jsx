@@ -73,69 +73,71 @@ const LeaveRequestsPage = () => {
   const getHodStatusLabel = (hodStatus) => {
     switch (hodStatus) {
       case 1:
-        return <span className={`${styles.status} ${styles.approved}`}>Approved</span>;
+        return <span className={`${styles.status} ${styles.approved}`}>Approuvé</span>;
       case -1:
-        return <span className={`${styles.status} ${styles.declined}`}>Declined</span>;
+        return <span className={`${styles.status} ${styles.declined}`}>Refusé</span>;
       default:
-        return <span className={`${styles.status} ${styles.pending}`}>Pending</span>;
+        return <span className={`${styles.status} ${styles.pending}`}>En Attente</span>;
     }
+    
   };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>Leave Requests</h2>
+      <h2 className={styles.heading}>Demandes de Congé</h2>
       <div className='tableContainer'> 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>Leave Type</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Reason</th>
-            <th>Requested By</th>
-            <th>HOD Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {leaveRequests.length > 0 ? (
-            leaveRequests.map((request) => (
-              <tr key={request.id}>
-                <td>{request.leaveType}</td>
-                <td>{new Date(request.startDate.seconds * 1000).toLocaleDateString()}</td>
-                <td>{new Date(request.endDate.seconds * 1000).toLocaleDateString()}</td>
-                <td>{request.reason || 'N/A'}</td>
-                <td>{request.fullName}</td>
-                <td>{getHodStatusLabel(request.HodStatus)}</td>
-                <td>
-                  {request.HodStatus === 0 && (
-                    <>
-                      <button 
-                        className={styles.approveButton} 
-                        onClick={() => handleApprove(request.id)}>
-                        Approve
-                      </button>
-                      <button 
-                        className={styles.declineButton} 
-                        onClick={() => handleDecline(request.id)}>
-                        Decline
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))
-          ) : (
+        <table className={styles.table}>
+          <thead>
             <tr>
-              <td colSpan="7" className={styles.noRequests}>No leave requests found for your organization.</td>
+              <th>Type de Congé</th>
+              <th>Date de Début</th>
+              <th>Date de Fin</th>
+              <th>Raison</th>
+              <th>Demandé Par</th>
+              <th>Statut HOD</th>
+              <th>Actions</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {leaveRequests.length > 0 ? (
+              leaveRequests.map((request) => (
+                <tr key={request.id}>
+                  <td>{request.leaveType}</td>
+                  <td>{new Date(request.startDate.seconds * 1000).toLocaleDateString()}</td>
+                  <td>{new Date(request.endDate.seconds * 1000).toLocaleDateString()}</td>
+                  <td>{request.reason || 'N/A'}</td>
+                  <td>{request.fullName}</td>
+                  <td>{getHodStatusLabel(request.HodStatus)}</td>
+                  <td>
+                    {request.HodStatus === 0 && (
+                      <>
+                        <button 
+                          className={styles.approveButton} 
+                          onClick={() => handleApprove(request.id)}>
+                          Approuver
+                        </button>
+                        <button 
+                          className={styles.declineButton} 
+                          onClick={() => handleDecline(request.id)}>
+                          Refuser
+                        </button>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" className={styles.noRequests}>Aucune demande de congé trouvée pour votre organisation.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
       <ToastContainer />
     </div>
   );
+  
 };
 
 export default LeaveRequestsPage;

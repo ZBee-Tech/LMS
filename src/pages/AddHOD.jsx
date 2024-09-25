@@ -121,7 +121,7 @@ const AddUser = () => {
   return (
     <Container component="main" maxWidth="xs">
       <Typography variant="h6" align="center" gutterBottom>
-        Add New User
+        Ajouter un Nouvel Utilisateur
       </Typography>
       <form onSubmit={handleAddUser}>
         <Grid container spacing={2}>
@@ -129,39 +129,39 @@ const AddUser = () => {
             <TextField
               select
               fullWidth
-              label="Role"
+              label="Rôle"
               value={role}
               onChange={(e) => setRole(e.target.value)}
               variant="outlined"
             >
-              <MenuItem value="Select Role">Select Role</MenuItem>
-              <MenuItem value="Employee">Employee</MenuItem>
-              <MenuItem value="HOD">HOD</MenuItem>
+              <MenuItem value="Sélectionner un Rôle">Sélectionner un Rôle</MenuItem>
+              <MenuItem value="Employee">Employé</MenuItem>
+              <MenuItem value="HOD">Responsable</MenuItem>
             </TextField>
           </Grid>
-
+  
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Full Name"
+              label="Nom Complet"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               variant="outlined"
               required
             />
           </Grid>
-
+  
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Username"
+              label="Nom d'utilisateur"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               variant="outlined"
               required
             />
           </Grid>
-
+  
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -173,11 +173,11 @@ const AddUser = () => {
               required
             />
           </Grid>
-
+  
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Password"
+              label="Mot de passe"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -185,12 +185,12 @@ const AddUser = () => {
               required
             />
           </Grid>
-
+  
           {role === 'HOD' && (
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Department"
+                label="Département"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
                 variant="outlined"
@@ -198,13 +198,13 @@ const AddUser = () => {
               />
             </Grid>
           )}
-
+  
           {role === 'Employee' && (
             <Grid item xs={12}>
               <TextField
                 select
                 fullWidth
-                label="Select HOD"
+                label="Sélectionner Responsable"
                 value={selectedHod}
                 onChange={(e) => setSelectedHod(e.target.value)}
                 variant="outlined"
@@ -218,7 +218,7 @@ const AddUser = () => {
               </TextField>
             </Grid>
           )}
-
+  
           <Grid item xs={12}>
             <Button
               type="submit"
@@ -227,7 +227,7 @@ const AddUser = () => {
               color="primary"
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} /> : 'Add User'}
+              {loading ? <CircularProgress size={24} /> : 'Ajouter un Utilisateur'}
             </Button>
           </Grid>
         </Grid>
@@ -235,6 +235,7 @@ const AddUser = () => {
       <ToastContainer />
     </Container>
   );
+  
 };
 
 export default AddUser;

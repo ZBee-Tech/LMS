@@ -82,21 +82,21 @@ const HomeHR = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>Welcome to HR Dashboard</h2>
+      <h2 className={styles.heading}>Bienvenue sur le tableau de bord RH</h2>
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Role</th>
-            <th>HOD/Department</th>
-            <th>Leave Limit</th>
+            <th>Nom</th>
+            <th>Rôle</th>
+            <th>HOD/Département</th>
+            <th>Limite de Congé</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan={userRole === 'HR Manager' ? '5' : '4'} className={styles.loading}>Loading...</td>
+              <td colSpan={userRole === 'HR Manager' ? '5' : '4'} className={styles.loading}>Chargement...</td>
             </tr>
           ) : users.length > 0 ? (
             users.map((user) => (
@@ -115,20 +115,20 @@ const HomeHR = () => {
                       />
                     </td>
                     <td>
-                      <button onClick={() => handleSubmit(user.id)} className={styles.button}>Submit</button>
+                      <button onClick={() => handleSubmit(user.id)} className={styles.button}>Soumettre</button>
                     </td>
                   </>
                 )}
                 {userRole === 'HR Manager' && (
                   <td>
-                    <button onClick={() => deleteUser(user.id)} className={styles.button}>Delete</button>
+                    <button onClick={() => deleteUser(user.id)} className={styles.button}>Supprimer</button>
                   </td>
                 )}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={userRole === 'HR Manager' ? '5' : '4'} className={styles.noUsers}>No users found.</td>
+              <td colSpan={userRole === 'HR Manager' ? '5' : '4'} className={styles.noUsers}>Aucun utilisateur trouvé.</td>
             </tr>
           )}
         </tbody>
@@ -136,6 +136,7 @@ const HomeHR = () => {
       <ToastContainer />
     </div>
   );
+  
 };
 
 export default HomeHR;

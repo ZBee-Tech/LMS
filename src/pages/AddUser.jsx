@@ -80,7 +80,7 @@ const AddUser = () => {
   return (
     <Container component="main" maxWidth="xs">
       <Typography variant="h6" align="center" gutterBottom>
-        Add New User
+        Ajouter un nouvel utilisateur
       </Typography>
       <form onSubmit={handleAddUser}>
         <Grid container spacing={2}>
@@ -88,38 +88,38 @@ const AddUser = () => {
             <TextField
               select
               fullWidth
-              label="Role"
+              label="Rôle"
               value={role}
               onChange={(e) => setRole(e.target.value)}
               variant="outlined"
             >
-              <MenuItem value="HR Manager">HR Manager</MenuItem>
-              {/* Add more roles here as needed */}
+              <MenuItem value="HR Manager">Responsable RH</MenuItem>
+              {/* Ajoutez d'autres rôles ici si nécessaire */}
             </TextField>
           </Grid>
-
+  
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Full Name"
+              label="Nom Complet"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               variant="outlined"
               required
             />
           </Grid>
-
+  
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Username"
+              label="Nom d'utilisateur"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               variant="outlined"
               required
             />
           </Grid>
-
+  
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -131,11 +131,11 @@ const AddUser = () => {
               required
             />
           </Grid>
-
+  
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Password"
+              label="Mot de passe"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -143,7 +143,7 @@ const AddUser = () => {
               required
             />
           </Grid>
-
+  
           <Grid item xs={12}>
             <Button
               type="submit"
@@ -152,7 +152,7 @@ const AddUser = () => {
               color="primary"
               disabled={loading}
             >
-              {loading ? <CircularProgress size={24} /> : 'Add User'}
+              {loading ? <CircularProgress size={24} /> : 'Ajouter l\'utilisateur'}
             </Button>
           </Grid>
         </Grid>
@@ -160,6 +160,7 @@ const AddUser = () => {
       <ToastContainer />
     </Container>
   );
+  
 };
 
 export default AddUser;
