@@ -1,64 +1,85 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useQueryClient } from 'react-query';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../firebase-config';
-import styles from '../assets/CSS/Header.module.css';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useQueryClient } from "react-query";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebase-config";
+import styles from "../assets/CSS/Header.module.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const Header = () => {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
-  const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
+  const [notificationDropdownOpen, setNotificationDropdownOpen] =
+    useState(false);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const userName = localStorage.getItem('fullName') || 'User';
-  const userRole = (localStorage.getItem('role') || 'Role').trim();  
-  const organizationId = localStorage.getItem('organizationId');  
-  const userId = localStorage.getItem('userId');  
+  const userName = localStorage.getItem("fullName") || "User";
+  const userRole = (localStorage.getItem("role") || "Role").trim();
+  const organizationId = localStorage.getItem("organizationId");
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        setLoading(true);  
-        const leaveRequestsRef = collection(db, 'leaveRequests');
+        setLoading(true);
+        const leaveRequestsRef = collection(db, "leaveRequests");
         let leaveRequestsQuery;
 
-        if (userRole === 'HR Manager') {
-          leaveRequestsQuery = query(leaveRequestsRef, where('HrStatus', '==', 0), where('organizationID', '==', organizationId));
-        } else if (userRole === 'CEO') {
-          leaveRequestsQuery = query(leaveRequestsRef, where('CeoStatus', '==', 0),  where('HrStatus', '==', 1));
-        } else if (userRole === 'HOD') {
-          leaveRequestsQuery = query(leaveRequestsRef, where('HodStatus', '==', 0), where('organizationID', '==', organizationId));
-        } else if (userRole === 'Employee') {
-          leaveRequestsQuery = query(leaveRequestsRef, where('Status', '==', 1), where('userId', '==', userId));
+        if (userRole === "HR Manager") {
+          leaveRequestsQuery = query(
+            leaveRequestsRef,
+            where("HrStatus", "==", 0),
+            where("organizationID", "==", organizationId)
+          );
+        } else if (userRole === "CEO") {
+          leaveRequestsQuery = query(
+            leaveRequestsRef,
+            where("CeoStatus", "==", 0),
+            where("HrStatus", "==", 1)
+          );
+        } else if (userRole === "HOD") {
+          leaveRequestsQuery = query(
+            leaveRequestsRef,
+            where("HodStatus", "==", 0),
+            where("organizationID", "==", organizationId)
+          );
+        } else if (userRole === "Employee") {
+          leaveRequestsQuery = query(
+            leaveRequestsRef,
+            where("Status", "==", 1),
+            where("userId", "==", userId)
+          );
         } else {
-          return;  
+          return;
         }
 
         const querySnapshot = await getDocs(leaveRequestsQuery);
 
         const allLeaveRequests = querySnapshot.docs.map((doc) => {
           const data = doc.data();
-          console.log('Leave Request:', data);
+          console.log("Leave Request:", data);
 
           return {
-            message: userRole === "Employee" ?  `Your leave request has been Approved for reasson  ${data.leaveType}` : `Leave request from ${data.fullName}`,
+            message:
+              userRole === "Employee"
+                ? `Your leave request has been Approved for reasson  ${data.leaveType}`
+                : `Leave request from ${data.fullName}`,
             read: false,
-          };});
-          
+          };
+        });
+
         setNotifications(allLeaveRequests);
       } catch (error) {
-        console.error('Error fetching notifications:', error);
+        console.error("Error fetching notifications:", error);
       } finally {
-        setLoading(false);  
+        setLoading(false);
       }
     };
 
     fetchNotifications();
-  }, [userRole, organizationId, userId]);  
+  }, [userRole, organizationId, userId]);
 
   const toggleProfileDropdown = () => {
     setProfileDropdownOpen((prev) => !prev);
@@ -67,7 +88,7 @@ const Header = () => {
   const handleLogout = () => {
     queryClient.clear();
     localStorage.clear();
-    navigate('/');
+    navigate("/");
   };
 
   const handleNotificationClick = () => {
@@ -94,12 +115,20 @@ const Header = () => {
       </div>
 
       <div className="d-flex align-items-center">
-        {(userRole === 'HR Manager' || userRole === 'CEO' || userRole === 'HOD' || userRole === 'Employee') && (
-          <div className={styles.notification} onClick={handleNotificationClick}>
+        {(userRole === "HR Manager" ||
+          userRole === "CEO" ||
+          userRole === "HOD" ||
+          userRole === "Employee") && (
+          <div
+            className={styles.notification}
+            onClick={handleNotificationClick}
+          >
             <i className="fas fa-bell"></i>
             <span
               className={`${styles.notificationDot} ${
-                notifications.some((notification) => !notification.read) ? styles.visible : ''
+                notifications.some((notification) => !notification.read)
+                  ? styles.visible
+                  : ""
               }`}
             ></span>
           </div>
@@ -114,17 +143,21 @@ const Header = () => {
               className={styles.prof}
             />
           </div>
-          <div className={`${styles.dropdownMenu} ${profileDropdownOpen ? styles.open : ''}`}>
+          <div
+            className={`${styles.dropdownMenu} ${
+              profileDropdownOpen ? styles.open : ""
+            }`}
+          >
             <div className={styles.dropdownItem}>
               <span className={styles.userName}>
                 {userName} <span className={styles.userRole}>({userRole})</span>
               </span>
             </div>
             <div className={styles.dropdownItem}>
-              <Link to="/update-profile">My profile</Link>
+              <Link to="/update-profile">Mon profil</Link>
             </div>
             <div className={styles.dropdownItem} onClick={handleLogout}>
-              Logout
+              Déconnexion
             </div>
           </div>
         </div>
@@ -138,9 +171,12 @@ const Header = () => {
             notifications.map((notification, index) => (
               <div key={index} className={styles.notificationItem}>
                 {notification.read ? (
-                  <i className="fas fa-check-circle" style={{ color: 'green' }}></i>
+                  <i
+                    className="fas fa-check-circle"
+                    style={{ color: "green" }}
+                  ></i>
                 ) : (
-                  <i className="fas fa-circle" style={{ color: 'orange' }}></i>
+                  <i className="fas fa-circle" style={{ color: "orange" }}></i>
                 )}
                 {notification.message}
               </div>

@@ -151,10 +151,10 @@ const AdminDashboard = () => {
   return (
     <Container className={styles.dashboardContainer}>
       <Typography variant="h6" align="center" gutterBottom>
-        All Users and Organizations
+        Tous les Utilisateurs et Organisations
       </Typography>
       <TextField
-        label="Search Users"
+        label="Rechercher des Utilisateurs"
         variant="outlined"
         fullWidth
         margin="normal"
@@ -164,7 +164,7 @@ const AdminDashboard = () => {
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} sm={6} md={4}>
           <FormControl fullWidth margin="normal">
-            <InputLabel id="role-filter-label">Filter by Role</InputLabel>
+            <InputLabel id="role-filter-label">Filtrer par Rôle</InputLabel>
             <Select
               labelId="role-filter-label"
               value={roleFilter}
@@ -172,15 +172,15 @@ const AdminDashboard = () => {
               displayEmpty
             >
               <MenuItem value=""> </MenuItem>
-              <MenuItem value="CEO">CEO</MenuItem>
-              <MenuItem value="HR Manager">HR Manager</MenuItem>
-              <MenuItem value="HOD">HOD</MenuItem>
+              <MenuItem value="CEO">PDG</MenuItem>
+              <MenuItem value="HR Manager">Responsable RH</MenuItem>
+              <MenuItem value="HOD">Chef de Département</MenuItem>
             </Select>
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
           <FormControl fullWidth margin="normal">
-            <InputLabel id="record-count-label">Records per Page</InputLabel>
+            <InputLabel id="record-count-label">Enregistrements par Page</InputLabel>
             <Select
               labelId="record-count-label"
               value={recordCount}
@@ -200,7 +200,7 @@ const AdminDashboard = () => {
             onClick={handleExportCSV}
             fullWidth
           >
-            Export to CSV
+            Exporter en CSV
           </Button>
         </Grid>
       </Grid>
@@ -211,11 +211,11 @@ const AdminDashboard = () => {
         <Table className={styles.userTable}>
           <TableHead>
             <TableRow>
-              <TableCell>Organization</TableCell>
-              <TableCell>Full Name</TableCell>
+              <TableCell>Organisation</TableCell>
+              <TableCell>Nom Complet</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Username</TableCell>
+              <TableCell>Rôle</TableCell>
+              <TableCell>Nom d'Utilisateur</TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -234,7 +234,7 @@ const AdminDashboard = () => {
                     onClick={() => handleEdit(user)}
                     className={styles.actionButton}
                   >
-                    Edit
+                    Modifier
                   </Button> 
                   &nbsp;
                   <Button
@@ -243,7 +243,7 @@ const AdminDashboard = () => {
                     onClick={() => handleDelete(user.id)}
                     className={styles.actionButton}
                   >
-                    Delete
+                    Supprimer
                   </Button>
                 </TableCell>
               </TableRow>
@@ -264,12 +264,12 @@ const AdminDashboard = () => {
             <CloseIcon />
           </IconButton>
           <Typography variant="h5" id="edit-user-modal-title" className={styles.modalTitle}>
-            Edit User Details
+            Modifier les Détails de l'Utilisateur
           </Typography>
           {selectedUser && (
             <>
               <TextField
-                label="Full Name"
+                label="Nom Complet"
                 name="fullName"
                 value={selectedUser.fullName}
                 onChange={handleInputChange}
@@ -287,7 +287,7 @@ const AdminDashboard = () => {
                 className={styles.inputField}
               />
               <TextField
-                label="Username"
+                label="Nom d'Utilisateur"
                 name="username"
                 value={selectedUser.username}
                 onChange={handleInputChange}
@@ -296,7 +296,7 @@ const AdminDashboard = () => {
                 className={styles.inputField}
               />
               <Button variant="contained" color="primary" onClick={handleSaveChanges} fullWidth>
-                Save Changes
+                Sauvegarder les Modifications
               </Button>
             </>
           )}
@@ -305,6 +305,7 @@ const AdminDashboard = () => {
       <ToastContainer />
     </Container>
   );
+
 };
 
 export default AdminDashboard;

@@ -101,16 +101,16 @@ const LeavesReq = () => {
 
   return (
     <div style={{ padding: '20px' }}>
- 
+  
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         <FormControl style={{ marginRight: '20px', minWidth: '200px' }}>
-          <p>Organization</p>
+          <p>Organisation</p>
           <Select
             value={organizationFilter}
             onChange={handleOrganizationChange}
             displayEmpty
           >
-            <MenuItem value="">All Organizations</MenuItem>
+            <MenuItem value="">Toutes les organisations</MenuItem>
             {[...new Set(leaveRequests.map((req) => req.organizationID))].map(
               (organization, index) => (
                 <MenuItem key={index} value={organization}>
@@ -120,9 +120,9 @@ const LeavesReq = () => {
             )}
           </Select>
         </FormControl>
-
+  
         <FormControl style={{ marginRight: '20px', minWidth: '100px' }}>
-          <p>Records</p>
+          <p>Enregistrements</p>
           <Select
             value={recordCount}
             onChange={handleRecordCountChange}
@@ -134,28 +134,28 @@ const LeavesReq = () => {
             <MenuItem value={100}>100</MenuItem>
           </Select>
         </FormControl>
-
-        <CSVLink data={exportData} filename="leave_requests.csv">
-          <Button variant="contained" color="primary" style={{ marginTop:'42px' }}>
-            Export as CSV
+  
+        <CSVLink data={exportData} filename="demandes_congés.csv">
+          <Button variant="contained" color="primary" style={{ marginTop: '42px' }}>
+            Exporter en CSV
           </Button>
         </CSVLink>
       </div>
-
+  
       <Table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <TableHead>
           <TableRow>
-            <TableCell>Full Name</TableCell>
-            <TableCell>Leave Type</TableCell>
-            <TableCell>Start Date</TableCell>
-            <TableCell>End Date</TableCell>
-            <TableCell>Reason</TableCell>
-            <TableCell>HOD Status</TableCell>
-            <TableCell>HR Status</TableCell>
-            <TableCell>CEO Status</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Organization</TableCell>
-            <TableCell>Created At</TableCell>
+            <TableCell>Nom complet</TableCell>
+            <TableCell>Type de congé</TableCell>
+            <TableCell>Date de début</TableCell>
+            <TableCell>Date de fin</TableCell>
+            <TableCell>Motif</TableCell>
+            <TableCell>Statut HOD</TableCell>
+            <TableCell>Statut RH</TableCell>
+            <TableCell>Statut CEO</TableCell>
+            <TableCell>Statut</TableCell>
+            <TableCell>Organisation</TableCell>
+            <TableCell>Date de création</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -167,10 +167,10 @@ const LeavesReq = () => {
               <TableCell>{request.startDate?.toDate().toLocaleDateString()}</TableCell>
               <TableCell>{request.endDate?.toDate().toLocaleDateString()}</TableCell>
               <TableCell>{request.reason}</TableCell>
-              <TableCell>{request.HodStatus === 1 ? 'Approved' : 'Pending'}</TableCell>
-              <TableCell>{request.HrStatus === 1 ? 'Approved' : 'Pending'}</TableCell>
-              <TableCell>{request.CeoStatus === 1 ? 'Approved' : 'Pending'}</TableCell>
-              <TableCell>{request.Status === 1 ? 'Approved' : 'Pending'}</TableCell>
+              <TableCell>{request.HodStatus === 1 ? 'Approuvé' : 'En attente'}</TableCell>
+              <TableCell>{request.HrStatus === 1 ? 'Approuvé' : 'En attente'}</TableCell>
+              <TableCell>{request.CeoStatus === 1 ? 'Approuvé' : 'En attente'}</TableCell>
+              <TableCell>{request.Status === 1 ? 'Approuvé' : 'En attente'}</TableCell>
               <TableCell>{request.organizationID}</TableCell>
               <TableCell>{request.createdAt?.toDate().toLocaleString()}</TableCell>
               <TableCell>
@@ -184,6 +184,7 @@ const LeavesReq = () => {
       </Table>
     </div>
   );
+  
 };
 
 export default LeavesReq;
