@@ -47,7 +47,7 @@ const LoginPage = () => {
         localStorage.setItem('fullName', fullName);
         localStorage.setItem('organizationId', organizationId);
 
-        toast.success('Login successful!');
+        toast.success("Connexion réussie !");
         navigate(role === "Employee" ? '/leaveoverview' : 
                  role === "HR Manager" ? '/homehr' : 
                  role === "HOD" ? '/leavesDataHOD' : 

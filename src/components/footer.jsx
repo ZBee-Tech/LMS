@@ -7,8 +7,6 @@ const Footer = () => {
         <div className={styles.footerLeft}>
           <p>&copy; 2024 Mon application. Tous droits réservés.</p>
         </div>
-     
-     
       </div>
     </footer>
   );

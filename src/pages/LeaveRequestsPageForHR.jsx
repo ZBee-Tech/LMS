@@ -25,13 +25,13 @@ const LeaveRequestsPageForHR = () => {
         );
         setLeaveRequests(hrRequests);
 
-         const hasPendingRequests = hrRequests.some(request => request.HrStatus === 0);
+        const hasPendingRequests = hrRequests.some(request => request.HrStatus === 0);
         if (hasPendingRequests) {
           localStorage.setItem('HRStatus', '0');  
         }
       } catch (error) {
-        console.error('Error fetching leave requests:', error);
-        toast.error('Failed to fetch leave requests.');
+        console.error('Erreur lors de la récupération des demandes de congé :', error);
+        toast.error('Échec de la récupération des demandes de congé.');
       }
     };
 
@@ -45,15 +45,15 @@ const LeaveRequestsPageForHR = () => {
         ApprovedByHR: hrId,
         HrStatus: 1   
       });
-      toast.success('Leave request approved by HR successfully!');
+      toast.success('Demande de congé approuvée par les RH avec succès !');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request => 
           request.id === requestId ? { ...request, ApprovedByHR: hrId, HrStatus: 1 } : request
         )
       );
     } catch (error) {
-      console.error('Error approving leave request by HR:', error);
-      toast.error('Failed to approve leave request by HR.');
+      console.error('Erreur lors de l\'approbation de la demande de congé par les RH :', error);
+      toast.error('Échec de l\'approbation de la demande de congé par les RH.');
     }
   };
 
@@ -64,26 +64,26 @@ const LeaveRequestsPageForHR = () => {
         ApprovedByHR: hrId,
         HrStatus: -1   
       });
-      toast.success('Leave request declined by HR successfully!');
+      toast.success('Demande de congé refusée par les RH avec succès !');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request => 
           request.id === requestId ? { ...request, ApprovedByHR: hrId, HrStatus: -1 } : request
         )
       );
     } catch (error) {
-      console.error('Error declining leave request by HR:', error);
-      toast.error('Failed to decline leave request by HR.');
+      console.error('Erreur lors du refus de la demande de congé par les RH :', error);
+      toast.error('Échec du refus de la demande de congé par les RH.');
     }
   };
 
   const getStatusLabel = (HrStatus) => {
     switch (HrStatus) {
       case 1:
-        return <span className={`${styles.status} ${styles.approved}`}>Approved by HR</span>;
+        return <span className={`${styles.status} ${styles.approved}`}>Approuvé par les RH</span>;
       case -1:
-        return <span className={`${styles.status} ${styles.declined}`}>Declined by HR</span>;
+        return <span className={`${styles.status} ${styles.declined}`}>Refusé par les RH</span>;
       default:
-        return <span className={`${styles.status} ${styles.pending}`}>Pending</span>;
+        return <span className={`${styles.status} ${styles.pending}`}>En attente</span>;
     }
   };
 

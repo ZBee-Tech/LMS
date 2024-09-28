@@ -39,7 +39,7 @@ const LeaveRequestForm = () => {
       setFullName(savedFullName);
       setorganizationid(organizationid);
     } else {
-      toast.error('Login data not found. Please log in again.');
+      toast.error('Les données de connexion ne sont pas disponibles. Veuillez vous reconnecter.');
     }
   }, []);
 
@@ -54,8 +54,8 @@ const LeaveRequestForm = () => {
         }));
         setLeaveTypes(leaveTypesList);
       } catch (error) {
-        console.error('Error fetching leave types:', error);
-        toast.error('Failed to fetch leave types.');
+        console.error('Erreur lors de la récupération des types de congé :', error);
+        toast.error('Échec de la récupération des types de congé.');
       }
     };
 
@@ -72,13 +72,12 @@ const LeaveRequestForm = () => {
 
         usersList.forEach(user => {
           if (user.id === userId) {
-            console.log(`Matching User ID: ${user.id}, Leave Limits:`, user.leaveLimit || {});
             setCheck(user.leaveLimit);
           }
         });
       } catch (error) {
-        console.error('Error fetching user leave limits:', error);
-        toast.error('Failed to fetch user leave limits.');
+        console.error('Erreur lors de la récupération des limites de congé de l\'utilisateur :', error);
+        toast.error('Échec de la récupération des limites de congé de l\'utilisateur.');
       }
     };
 
@@ -114,22 +113,22 @@ const LeaveRequestForm = () => {
     e.preventDefault();
 
     if (daysRequested > Check) {
-      toast.error(`Please apply according to your leave limit. Your limit for leaves was ${Check}.`);
+      toast.error(`Veuillez appliquer conformément à votre limite de congé. Votre limite de congé est de ${Check} jours.`);
       return;
     }
     if (!startDate || !endDate) {
-      toast.error('Please select both start and end dates.');
+      toast.error('Veuillez sélectionner à la fois une date de début et une date de fin.');
       return;
     }
 
     if (endDate < startDate) {
-      toast.error('End date must be after start date.');
+      toast.error('La date de fin doit être après la date de début.');
       return;
     }
 
     const leaveLimit = leaveLimits[leaveType];
     if (leaveLimit !== undefined && daysRequested > leaveLimit) {
-      toast.error(`You cannot request more than ${leaveLimit} days of ${leaveType}.`);
+      toast.error(`Vous ne pouvez pas demander plus de ${leaveLimit} jours pour le type de congé ${leaveType}.`);
       return;
     }
 
@@ -159,87 +158,86 @@ const LeaveRequestForm = () => {
 
     try {
       await addDoc(collection(db, 'leaveRequests'), leaveRequestData);
-      toast.success('Leave request submitted successfully!');
+      toast.success('Demande de congé soumise avec succès !');
 
       setLeaveType('');
       setStartDate(null);
       setEndDate(null);
       setReason('');
     } catch (error) {
-      console.error('Error saving leave request to Firebase:', error);
-      toast.error('Failed to submit leave request.');
+      console.error('Erreur lors de l\'enregistrement de la demande de congé dans Firebase :', error);
+      toast.error('Échec de la soumission de la demande de congé.');
     }
   };
 
   return (
     <div className={styles.container}>
-    <div className={styles.formWrapper}>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.formGroup}>
-          <label htmlFor="leaveType" className={styles.label}>Type de congé</label>
-          <select
-            id="leaveType"
-            className={styles.select}
-            value={leaveType}
-            onChange={(e) => setLeaveType(e.target.value)}
-          >
-            <option value="">Sélectionner le type de congé</option>
-            {leaveTypes.map(({ id, leaveType }) => (
-              <option key={id} value={leaveType}>{leaveType}</option>
-            ))}
-          </select>
-        </div>
-  
-        <div className={styles.formGroup}>
-          <label htmlFor="startDate" className={styles.label}>Date de début</label>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            className={styles.input}
-            dateFormat="yyyy/MM/dd"
-            placeholderText="Sélectionner la date de début"
-            minDate={today} // Autoriser aujourd'hui comme date de début
-          />
-        </div>
-  
-        <div className={styles.formGroup}>
-          <label htmlFor="endDate" className={styles.label}>Date de fin</label>
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            className={styles.input}
-            dateFormat="yyyy/MM/dd"
-            placeholderText="Sélectionner la date de fin"
-            minDate={startDate ? startDate : today} // Autoriser la date de début ou aujourd'hui comme date de fin
-          />
-        </div>
-  
-        <div className={styles.formGroup}>
-          <label htmlFor="reason" className={styles.label}>Raison (Facultatif)</label>
-          <textarea
-            id="reason"
-            rows="4"
-            className={styles.textarea}
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-          />
-        </div>
-  
-        <div className={styles.formGroup}>
-          <p className={styles.label}>Total des jours demandés : {daysRequested}</p>
-          <p className={styles.label}>Dimanches exclus : {sundaysExcluded}</p>
-        </div>
-  
-        <div className={styles.submitWrapper}>
-          <button type="submit" className={styles.submitButton}>
-            Soumettre la demande
-          </button>
-        </div>
-      </form>
+      <div className={styles.formWrapper}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.formGroup}>
+            <label htmlFor="leaveType" className={styles.label}>Type de congé</label>
+            <select
+              id="leaveType"
+              className={styles.select}
+              value={leaveType}
+              onChange={(e) => setLeaveType(e.target.value)}
+            >
+              <option value="">Sélectionner le type de congé</option>
+              {leaveTypes.map(({ id, leaveType }) => (
+                <option key={id} value={leaveType}>{leaveType}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="startDate" className={styles.label}>Date de début</label>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              className={styles.input}
+              dateFormat="yyyy/MM/dd"
+              placeholderText="Sélectionner la date de début"
+              minDate={today} 
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="endDate" className={styles.label}>Date de fin</label>
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              className={styles.input}
+              dateFormat="yyyy/MM/dd"
+              placeholderText="Sélectionner la date de fin"
+              minDate={startDate ? startDate : today} 
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="reason" className={styles.label}>Raison (Facultatif)</label>
+            <textarea
+              id="reason"
+              rows="4"
+              className={styles.textarea}
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <p className={styles.label}>Total des jours demandés : {daysRequested}</p>
+            <p className={styles.label}>Dimanches exclus : {sundaysExcluded}</p>
+          </div>
+
+          <div className={styles.submitWrapper}>
+            <button type="submit" className={styles.submitButton}>
+              Soumettre la demande
+            </button>
+          </div>
+        </form>
+      </div>
+      <ToastContainer />
     </div>
-    <ToastContainer />
-  </div>
-  
   );
 };
 

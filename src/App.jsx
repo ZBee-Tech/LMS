@@ -14,8 +14,6 @@ import UpdateProfile from './pages/UpdateProfile';
 import AddHOD from './pages/AddHOD.jsx';   
 import LeaveOverview from './pages/LeaveOverview';   
 import LeavesReq from './pages/LeavesReqAll.jsx';   
-
-
 import './App.css';
 import LeaveRequestsPageForHR from './pages/LeaveRequestsPageForHR';
 import LeaveRequestsPageForCEO from './pages/LeaveRequestsPageForCEO';

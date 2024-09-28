@@ -23,8 +23,7 @@ const LeaveTypeManager = () => {
         }));
         setLeaveTypes(leaveTypesList);
       } catch (error) {
-        console.error('Error fetching leave types:', error);
-        toast.error('Failed to fetch leave types.');
+        toast.error("Échec de la récupération des types de congé.");
       }
     };
 
@@ -50,7 +49,7 @@ const LeaveTypeManager = () => {
       const leaveRef = doc(db, 'LeaveTypes', doc(collection(db, 'LeaveTypes')).id);
       await setDoc(leaveRef, leaveData);
 
-      toast.success('Leave type added successfully!');
+      toast.success("Type de congé ajouté avec succès !");
 
       setLeaveType('');
       setLimit('');
@@ -63,8 +62,7 @@ const LeaveTypeManager = () => {
       }));
       setLeaveTypes(leaveTypesList);
     } catch (error) {
-      console.error('Error adding leave type:', error);
-      toast.error('Failed to add leave type.');
+      toast.error("Échec de l'ajout du type de congé.");
     } finally {
       setLoading(false);
     }
@@ -73,7 +71,7 @@ const LeaveTypeManager = () => {
   const handleDeleteLeaveType = async (id) => {
     try {
       await deleteDoc(doc(db, 'LeaveTypes', id));
-      toast.success('Leave type deleted successfully!');
+      toast.success("Type de congé supprimé avec succès !");
 
       const leaveTypesCollection = collection(db, 'LeaveTypes');
       const leaveTypesSnapshot = await getDocs(leaveTypesCollection);
@@ -83,8 +81,7 @@ const LeaveTypeManager = () => {
       }));
       setLeaveTypes(leaveTypesList);
     } catch (error) {
-      console.error('Error deleting leave type:', error);
-      toast.error('Failed to delete leave type.');
+      toast.error("Échec de la suppression du type de congé.");
     }
   };
 

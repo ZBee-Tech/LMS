@@ -14,12 +14,10 @@ const LeaveTrackingForm = () => {
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
       setUserId(storedUserId);
-      console.log('Saved User ID:', storedUserId);  
     } else {
-      const newUserId = generateUserId();  
+      const newUserId = generateUserId();
       setUserId(newUserId);
       localStorage.setItem('userId', newUserId);
-      console.log('Generated and saved new User ID:', newUserId);
     }
   }, []);
 
@@ -30,7 +28,6 @@ const LeaveTrackingForm = () => {
   }, [userId]);
 
   const fetchLeaveRequests = async () => {
-    console.log('Fetching leave requests for user ID:', userId);
     setLoading(true);
     try {
       const leaveRequestCollection = collection(db, 'leaveRequests');
@@ -38,22 +35,18 @@ const LeaveTrackingForm = () => {
       const leaveRequestSnapshot = await getDocs(q);
       const filteredRequests = leaveRequestSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-      console.log('Filtered leave requests:', filteredRequests);
       setLeaveRequests(filteredRequests);
 
-       const approvedRequests = filteredRequests.filter(request => request.CeoStatus === 1);
+      const approvedRequests = filteredRequests.filter(request => request.CeoStatus === 1);
       if (approvedRequests.length > 0) {
         const currentCount = parseInt(localStorage.getItem('approvedLeaveCount')) || 0;
         localStorage.setItem('approvedLeaveCount', currentCount + 1);
-        console.log('Incremented approved leave count:', currentCount + 1);
-
-         localStorage.setItem('userStatus', '1');
-        console.log('User status saved as 1 in local storage');
+        localStorage.setItem('userStatus', '1');
       }
 
     } catch (error) {
-      console.error('Error fetching leave requests:', error);
-      toast.error('Failed to fetch leave requests.');
+      console.error('Erreur lors de la récupération des demandes de congé :', error);
+      toast.error('Échec de la récupération des demandes de congé.');
     }
     setLoading(false);
   };
@@ -63,21 +56,21 @@ const LeaveTrackingForm = () => {
   };
 
   const getStatusLabel = (HodStatus, HrStatus, CeoStatus) => {
-    if (HodStatus === 0) return 'Pending by HOD';
-    if (HodStatus === 1 && HrStatus === 0) return 'Pending by HR';
-    if (HodStatus === 1 && HrStatus === 1 && CeoStatus === 0) return 'Pending by CEO';
-    if (HodStatus === -1) return 'Declined by HOD';
-    if (HrStatus === -1) return 'Declined by HR';
-    if (CeoStatus === -1) return 'Declined by CEO';
-    if (HodStatus === 1 && HrStatus === 1 && CeoStatus === 1) return 'Approved by CEO';
-  
-    return 'Unknown Status';
+    if (HodStatus === 0) return 'En attente par le Responsable';
+    if (HodStatus === 1 && HrStatus === 0) return 'En attente par les RH';
+    if (HodStatus === 1 && HrStatus === 1 && CeoStatus === 0) return 'En attente par le PDG';
+    if (HodStatus === -1) return 'Refusé par le Responsable';
+    if (HrStatus === -1) return 'Refusé par les RH';
+    if (CeoStatus === -1) return 'Refusé par le PDG';
+    if (HodStatus === 1 && HrStatus === 1 && CeoStatus === 1) return 'Approuvé par le PDG';
+
+    return 'Statut Inconnu';
   };
 
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Suivre les demandes de congé</h2>
-      
+
       <table className={styles.table}>
         <thead>
           <tr>
@@ -113,7 +106,6 @@ const LeaveTrackingForm = () => {
       <ToastContainer />
     </div>
   );
-  
 };
 
 export default LeaveTrackingForm;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MDBContainer, MDBCol, MDBRow, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
+import { MDBContainer, MDBCol, MDBRow, MDBInput } from 'mdb-react-ui-kit';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from '../firebase-config';
@@ -17,18 +17,18 @@ const ForgetPassword = () => {
     e.preventDefault();
 
     if (!email) {
-      toast.error('Please enter your email address.');
+      toast.error('Veuillez entrer votre adresse e-mail.');
       return;
     }
 
     try {
       setLoading(true);
       await sendPasswordResetEmail(auth, email);
-      toast.success('Password reset email sent. Please check your inbox.');
+      toast.success('E-mail de réinitialisation du mot de passe envoyé. Veuillez vérifier votre boîte de réception.');
       navigate('/');  
     } catch (error) {
-      console.error('Error sending password reset email:', error);
-      toast.error('Error sending password reset email: ' + error.message);
+      console.error('Erreur lors de l\'envoi de l\'e-mail de réinitialisation du mot de passe :', error);
+      toast.error('Erreur lors de l\'envoi de l\'e-mail de réinitialisation du mot de passe : ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -42,16 +42,16 @@ const ForgetPassword = () => {
             <img
               src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
               className="img-fluid"
-              alt="Sample"
+              alt="Exemple"
             />
           </MDBCol>
 
           <MDBCol col='12' md='6' className={styles.formCol}>
-            <h2 className={styles.title}>Forgot Password</h2>
+            <h2 className={styles.title}>Mot de passe oublié</h2>
             <form onSubmit={handlePasswordReset} className={styles.form}>
               <MDBInput
                 wrapperClass='mb-4'
-                label='Email address'
+                label='Adresse e-mail'
                 id='email'
                 type='email'
                 size="lg"
@@ -62,11 +62,11 @@ const ForgetPassword = () => {
               />
               <div className='text-center mt-4'>
                 <button className={styles.button} size='lg' type="submit" disabled={loading}>
-                  {loading ? 'Sending...' : 'Send Password Reset Email'}
+                  {loading ? 'Envoi en cours...' : 'Envoyer l\'e-mail de réinitialisation du mot de passe'}
                 </button>
                 <hr />
                 <br />
-                <Link to="/" className="link-danger">Login</Link>
+                <Link to="/" className="link-danger">Connexion</Link>
               </div>
             </form>
           </MDBCol>

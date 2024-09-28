@@ -26,8 +26,8 @@ const CEODashboard = () => {
         const filteredUsers = usersList.filter((user) => user.organizationId === ceoId);
         setUsers(filteredUsers);
       } catch (error) {
-        console.error('Error fetching users:', error);
-        toast.error('Failed to load users.');
+        console.error('Erreur lors de la récupération des utilisateurs :', error);
+        toast.error('Échec du chargement des utilisateurs.');
       } finally {
         setLoading(false);
       }
@@ -42,14 +42,14 @@ const CEODashboard = () => {
   };
 
   const handleDelete = async (userId) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
       try {
         await deleteDoc(doc(db, 'Users', userId));
         setUsers(users.filter(user => user.id !== userId));
-        toast.success('User deleted successfully.');
+        toast.success('Utilisateur supprimé avec succès.');
       } catch (error) {
-        console.error('Error deleting user:', error);
-        toast.error('Failed to delete user.');
+        console.error('Erreur lors de la suppression de l\'utilisateur :', error);
+        toast.error('Échec de la suppression de l\'utilisateur.');
       }
     }
   };
@@ -82,11 +82,11 @@ const CEODashboard = () => {
           user.id === selectedUser.id ? selectedUser : user
         )
       );
-      toast.success('User updated successfully.');
+      toast.success('Utilisateur mis à jour avec succès.');
       handleModalClose();
     } catch (error) {
-      console.error('Error updating user:', error);
-      toast.error('Failed to update user.');
+      console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
+      toast.error('Échec de la mise à jour de l\'utilisateur.');
     } finally {
       setIsSaving(false); // End saving
     }
@@ -215,7 +215,6 @@ const CEODashboard = () => {
       <ToastContainer />
     </Container>
   );
-  
 };
 
 export default CEODashboard;

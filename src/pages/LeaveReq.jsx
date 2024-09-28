@@ -39,15 +39,15 @@ const LeaveRequestsPage = () => {
         ApprovedbyHOD: hodId,
         HodStatus: 1
       });
-      toast.success('Leave request approved successfully!');
+      toast.success('Demande de congé approuvée avec succès !');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request =>
           request.id === requestId ? { ...request, ApprovedbyHOD: hodId, HodStatus: 1 } : request
         )
       );
     } catch (error) {
-      console.error('Error approving leave request:', error);
-      toast.error('Failed to approve leave request.');
+      console.error('Erreur lors de l\'approbation de la demande de congé :', error);
+      toast.error('Échec de l\'approbation de la demande de congé.');
     }
   };
 
@@ -58,15 +58,15 @@ const LeaveRequestsPage = () => {
         ApprovedbyHOD: hodId,
         HodStatus: -1   
       });
-      toast.success('Leave request declined successfully!');
+      toast.success('Demande de congé refusée avec succès !');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request =>
           request.id === requestId ? { ...request, ApprovedbyHOD: hodId, HodStatus: -1 } : request
         )
       );
     } catch (error) {
-      console.error('Error declining leave request:', error);
-      toast.error('Failed to decline leave request.');
+      console.error('Erreur lors du refus de la demande de congé :', error);
+      toast.error('Échec du refus de la demande de congé.');
     }
   };
 
@@ -79,7 +79,6 @@ const LeaveRequestsPage = () => {
       default:
         return <span className={`${styles.status} ${styles.pending}`}>En Attente</span>;
     }
-    
   };
 
   return (

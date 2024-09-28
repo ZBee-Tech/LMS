@@ -40,7 +40,7 @@ const SignupPage = () => {
       await setDoc(doc(db, "Users", user.uid), {
         email: user.email,
         fullName: fullName,
-        role: "PDG"
+        role: "CEO"
       });
 
       await sendEmailVerification(user);
@@ -56,7 +56,6 @@ const SignupPage = () => {
       setTermsAccepted(false);
 
     } catch (err) {
-      console.error('Erreur lors de l\'inscription:', err);
       toast.error('Erreur lors de l\'inscription: ' + err.message);
     } finally {
       setLoading(false);

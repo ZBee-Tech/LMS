@@ -100,7 +100,7 @@ const AddUser = () => {
         role: role
       });
 
-      toast.success('User added successfully! Verification email sent.');
+      toast.success('Utilisateur ajouté avec succès ! E-mail de vérification envoyé.');
 
       // Reset form fields
       setFullName('');
@@ -111,7 +111,7 @@ const AddUser = () => {
       setDepartment('');
       setSelectedHod('');
     } catch (error) {
-      console.error('Error adding user:', error);
+      console.error(`Erreur lors de l'ajout de l'utilisateur :`, error);
       toast.error('Failed to add user.');
     } finally {
       setLoading(false);

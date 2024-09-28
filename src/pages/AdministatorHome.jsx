@@ -54,8 +54,8 @@ const AdminDashboard = () => {
 
         setUsers(updatedUsers);
       } catch (error) {
-        console.error('Error fetching users:', error);
-        toast.error('Failed to load users.');
+        console.error('Erreur lors de la récupération des utilisateurs :', error);
+        toast.error('Échec du chargement des utilisateurs.');
       } finally {
         setLoading(false);
       }
@@ -70,14 +70,14 @@ const AdminDashboard = () => {
   };
 
   const handleDelete = async (userId) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
       try {
         await deleteDoc(doc(db, 'Users', userId));
         setUsers(users.filter(user => user.id !== userId));
-        toast.success('User deleted successfully.');
+        toast.success('Utilisateur supprimé avec succès.');
       } catch (error) {
-        console.error('Error deleting user:', error);
-        toast.error('Failed to delete user.');
+        console.error('Erreur lors de la suppression de l\'utilisateur :', error);
+        toast.error('Échec de la suppression de l\'utilisateur.');
       }
     }
   };
@@ -108,11 +108,11 @@ const AdminDashboard = () => {
           user.id === selectedUser.id ? selectedUser : user
         )
       );
-      toast.success('User updated successfully.');
+      toast.success('Utilisateur mis à jour avec succès.');
       handleModalClose();
     } catch (error) {
-      console.error('Error updating user:', error);
-      toast.error('Failed to update user.');
+      console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
+      toast.error('Échec de la mise à jour de l\'utilisateur.');
     }
   };
 
@@ -125,7 +125,7 @@ const AdminDashboard = () => {
 
   const handleExportCSV = () => {
     const csvRows = [];
-    const headers = ['Organization', 'Full Name', 'Email', 'Role', 'Username'];
+    const headers = ['Organisation', 'Nom Complet', 'Email', 'Rôle', 'Nom d\'Utilisateur'];
     csvRows.push(headers.join(','));
 
     filteredUsers.forEach(user => {
@@ -144,7 +144,7 @@ const AdminDashboard = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.setAttribute('href', url);
-    a.setAttribute('download', 'users.csv');
+    a.setAttribute('download', 'utilisateurs.csv');
     a.click();
   };
 

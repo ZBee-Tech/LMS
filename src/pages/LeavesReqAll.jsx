@@ -5,14 +5,11 @@ import {
   MenuItem,
   Button,
   FormControl,
-  InputLabel,
   Table,
   TableHead,
   TableRow,
   TableCell,
   TableBody,
-  Paper,
-  Typography,
   IconButton,
 } from '@mui/material';
 import { CSVLink } from 'react-csv';
@@ -24,7 +21,6 @@ const LeavesReq = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { role, userId } = location.state || {};
-
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [organizationFilter, setOrganizationFilter] = useState('');
@@ -46,7 +42,7 @@ const LeavesReq = () => {
       setLeaveRequests(requests);
       setFilteredRequests(requests.slice(0, recordCount));
     } catch (error) {
-      console.error('Error fetching leave requests:', error);
+      console.error("Erreur lors de la récupération des demandes de congé :", error);
     }
   };
 
@@ -79,10 +75,14 @@ const LeavesReq = () => {
       StartDate: request.startDate?.toDate().toLocaleDateString(),
       EndDate: request.endDate?.toDate().toLocaleDateString(),
       Reason: request.reason,
-      Status: request.Status === 1 ? 'Approved' : 'Pending',
-      HodStatus: request.HodStatus === 1 ? 'Approved' : 'Pending',
-      HrStatus: request.HrStatus === 1 ? 'Approved' : 'Pending',
-      CeoStatus: request.CeoStatus === 1 ? 'Approved' : 'Pending',
+      Status: request.Status === 1 ?
+        "Approuvé" : "En attente",
+      HodStatus: request.HodStatus === 1 ?
+        "Approuvé" : "En attente",
+      HrStatus: request.HrStatus === 1 ?
+        "Approuvé" : "En attente",
+      CeoStatus: request.CeoStatus === 1 ?
+        "Approuvé" : "En attente",
       Organization: request.organizationID,
       CreatedBy: request.createdBy,
       CreatedAt: request.createdAt?.toDate().toLocaleString(),
@@ -93,7 +93,7 @@ const LeavesReq = () => {
   const handleDelete = async (id) => {
     try {
       await deleteDoc(doc(db, 'leaveRequests', id));
-      fetchLeaveRequests();  
+      fetchLeaveRequests();
     } catch (error) {
       console.error('Error deleting leave request:', error);
     }
@@ -101,7 +101,7 @@ const LeavesReq = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-  
+
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         <FormControl style={{ marginRight: '20px', minWidth: '200px' }}>
           <p>Organisation</p>
@@ -120,7 +120,7 @@ const LeavesReq = () => {
             )}
           </Select>
         </FormControl>
-  
+
         <FormControl style={{ marginRight: '20px', minWidth: '100px' }}>
           <p>Enregistrements</p>
           <Select
@@ -134,14 +134,14 @@ const LeavesReq = () => {
             <MenuItem value={100}>100</MenuItem>
           </Select>
         </FormControl>
-  
+
         <CSVLink data={exportData} filename="demandes_congés.csv">
           <Button variant="contained" color="primary" style={{ marginTop: '42px' }}>
             Exporter en CSV
           </Button>
         </CSVLink>
       </div>
-  
+
       <Table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <TableHead>
           <TableRow>
@@ -184,7 +184,7 @@ const LeavesReq = () => {
       </Table>
     </div>
   );
-  
+
 };
 
 export default LeavesReq;

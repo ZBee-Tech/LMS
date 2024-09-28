@@ -33,8 +33,8 @@ const LeaveRequestsPageForCEO = () => {
           localStorage.setItem('ceoStatus', '0');
         }
       } catch (error) {
-        console.error('Error fetching leave requests:', error);
-        toast.error('Failed to fetch leave requests.');
+        console.error('Erreur lors de la récupération des demandes de congé :', error);
+        toast.error('Échec de la récupération des demandes de congé.');
       }
     };
 
@@ -49,15 +49,15 @@ const LeaveRequestsPageForCEO = () => {
         CeoStatus: 1,   
         Status: 1        
       });
-      toast.success('Leave request approved by CEO successfully!');
+      toast.success('Demande de congé approuvée par le PDG avec succès !');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request =>
           request.id === requestId ? { ...request, ApprovedByCEO: ceoId, CeoStatus: 1, Status: 1 } : request
         )
       );
     } catch (error) {
-      console.error('Error approving leave request by CEO:', error);
-      toast.error('Failed to approve leave request by CEO.');
+      console.error('Erreur lors de l\'approbation de la demande de congé par le PDG :', error);
+      toast.error('Échec de l\'approbation de la demande de congé par le PDG.');
     }
   };
 
@@ -69,15 +69,15 @@ const LeaveRequestsPageForCEO = () => {
         CeoStatus: -1,  
         Status: -1      
       });
-      toast.success('Leave request rejected by CEO successfully!');
+      toast.success('Demande de congé rejetée par le PDG avec succès !');
       setLeaveRequests(prevRequests =>
         prevRequests.map(request =>
           request.id === requestId ? { ...request, ApprovedByCEO: ceoId, CeoStatus: -1, Status: -1 } : request
         )
       );
     } catch (error) {
-      console.error('Error rejecting leave request by CEO:', error);
-      toast.error('Failed to reject leave request by CEO.');
+      console.error('Erreur lors du rejet de la demande de congé par le PDG :', error);
+      toast.error('Échec du rejet de la demande de congé par le PDG.');
     }
   };
 

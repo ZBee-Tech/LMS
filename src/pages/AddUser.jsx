@@ -22,7 +22,6 @@ const AddUser = () => {
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
       setUID(storedUserId);
-      console.log('User Role from Local Storage:', storedUserId);
     } else {
       setUID('');
     }
@@ -62,7 +61,7 @@ const AddUser = () => {
         role: role
       });
 
-      toast.success('User added successfully! Verification email sent.');
+      toast.success('Utilisateur ajouté avec succès ! E-mail de vérification envoyé.');
 
       setFullName('');
       setEmail('');
@@ -70,8 +69,8 @@ const AddUser = () => {
       setPassword('');
       setRole('HR Manager');
     } catch (error) {
-      console.error('Error adding user:', error);
-      toast.error('Failed to add user.');
+      console.error(`Erreur lors de l'ajout de l'utilisateur :`, error);
+      toast.error('Échec de l\'ajout de l\'utilisateur.');
     } finally {
       setLoading(false);
     }
@@ -160,7 +159,6 @@ const AddUser = () => {
       <ToastContainer />
     </Container>
   );
-  
 };
 
 export default AddUser;

@@ -22,11 +22,10 @@ const UpdateProfile = () => {
           if (userDoc.exists()) {
             setName(userDoc.data().fullName || '');
           } else {
-            toast.error('User data not found.');
+            toast.error('Données utilisateur non trouvées.');
           }
         } catch (err) {
-          console.error('Error fetching user data:', err);
-          toast.error('Error fetching user data.');
+          toast.error("Erreur lors de la récupération des données utilisateur.");
         }
       }
     };
@@ -53,10 +52,9 @@ const UpdateProfile = () => {
         await updatePassword(auth.currentUser, newPassword);
       }
 
-      toast.success('Profile updated successfully!');
+      toast.success("Profil mis à jour avec succès !");
     } catch (err) {
-      console.error('Error updating profile:', err);
-      toast.error('Error updating profile: ' + err.message);
+      toast.error("Erreur lors de la mise à jour du profil :" + err.message);
     } finally {
       setLoading(false);
     }

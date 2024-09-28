@@ -15,7 +15,6 @@ const HomeHR = () => {
     const storedUserRole = localStorage.getItem('userRole');
     if (storedUserRole) {
       setUserRole(storedUserRole);
-      console.log('User Role from Local Storage:', storedUserRole);
     } else {
       setUserRole('');
     }
@@ -36,13 +35,13 @@ const HomeHR = () => {
         .filter((user) => (user.role === 'Employee' || user.role === 'HOD') && user.organizationId === organizationId)
         .map((user) => ({
           ...user,
-          displayInfo: user.role === 'Employee' ? user.hodName || 'Unknown HOD' : user.department || 'Unknown Department',
+          displayInfo: user.role === 'Employee' ? user.hodName || 'HOD inconnu' : user.department || 'Département inconnu',
         }));
 
       setUsers(filteredUsers);
     } catch (error) {
-      console.error('Error fetching users:', error);
-      toast.error('Failed to fetch users.');
+      console.error('Erreur lors de la récupération des utilisateurs :', error);
+      toast.error('Échec de la récupération des utilisateurs.');
     }
     setLoading(false);
   };
@@ -61,10 +60,10 @@ const HomeHR = () => {
       try {
         const userRef = doc(db, 'Users', id);
         await updateDoc(userRef, { leaveLimit: user.newLeaveLimit });
-        toast.success('Leave limit updated successfully.');
+        toast.success('Limite de congé mise à jour avec succès.');
       } catch (error) {
-        console.error('Error updating leave limit:', error);
-        toast.error('Failed to update leave limit.');
+        console.error('Erreur lors de la mise à jour de la limite de congé :', error);
+        toast.error('Échec de la mise à jour de la limite de congé.');
       }
     }
   };
@@ -73,10 +72,10 @@ const HomeHR = () => {
     try {
       await deleteDoc(doc(db, 'Users', id));
       setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
-      toast.success('User deleted successfully.');
+      toast.success('Utilisateur supprimé avec succès.');
     } catch (error) {
-      console.error('Error deleting user:', error);
-      toast.error('Failed to delete user.');
+      console.error('Erreur lors de la suppression de l\'utilisateur :', error);
+      toast.error('Échec de la suppression de l\'utilisateur.');
     }
   };
 
@@ -136,7 +135,6 @@ const HomeHR = () => {
       <ToastContainer />
     </div>
   );
-  
 };
 
 export default HomeHR;

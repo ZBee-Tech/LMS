@@ -15,8 +15,21 @@ const Header = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const userName = localStorage.getItem("fullName") || "User";
-  const userRole = (localStorage.getItem("role") || "Role").trim();
+  const userName = localStorage.getItem("fullName") || "Utilisateur";
+  const userRole = (localStorage.getItem("role") || "Rôle").trim();
+  let displayRole = '';
+
+  if (userRole) {
+    if (userRole === "HR Manager") {
+      displayRole = "Responsable RH";
+    } else if (userRole === "CEO") {
+      displayRole = "PDG";
+    } else if (userRole === "HOD") {
+      displayRole = "Chef de département";
+    } else if (userRole === "Employee") {
+      displayRole = "Employé";
+    }
+  }
   const organizationId = localStorage.getItem("organizationId");
   const userId = localStorage.getItem("userId");
 
@@ -59,20 +72,19 @@ const Header = () => {
 
         const allLeaveRequests = querySnapshot.docs.map((doc) => {
           const data = doc.data();
-          console.log("Leave Request:", data);
 
           return {
             message:
               userRole === "Employee"
-                ? `Your leave request has been Approved for reasson  ${data.leaveType}`
-                : `Leave request from ${data.fullName}`,
+                ? `Votre demande de congé pour la raison ${data.leaveType} a été approuvée`
+                : `Demande de congé de ${data.fullName}`,
             read: false,
           };
         });
 
         setNotifications(allLeaveRequests);
       } catch (error) {
-        console.error("Error fetching notifications:", error);
+        console.error("Erreur lors de la récupération des notifications :", error);
       } finally {
         setLoading(false);
       }
@@ -108,7 +120,7 @@ const Header = () => {
         <Link to="/">
           <img
             src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
-            alt="MDB Logo"
+            alt="Logo MDB"
             loading="lazy"
           />
         </Link>
@@ -119,38 +131,36 @@ const Header = () => {
           userRole === "CEO" ||
           userRole === "HOD" ||
           userRole === "Employee") && (
-          <div
-            className={styles.notification}
-            onClick={handleNotificationClick}
-          >
-            <i className="fas fa-bell"></i>
-            <span
-              className={`${styles.notificationDot} ${
-                notifications.some((notification) => !notification.read)
-                  ? styles.visible
-                  : ""
-              }`}
-            ></span>
-          </div>
-        )}
+            <div
+              className={styles.notification}
+              onClick={handleNotificationClick}
+            >
+              <i className="fas fa-bell"></i>
+              <span
+                className={`${styles.notificationDot} ${notifications.some((notification) => !notification.read)
+                    ? styles.visible
+                    : ""
+                  }`}
+              ></span>
+            </div>
+          )}
 
         <div className={styles.dropdown}>
           <div className={styles.avatar} onClick={toggleProfileDropdown}>
             <img
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKqLoqUmsRrIYZhDUsffr5nkWfPcqC0guRC6Rpilz0C_VFhVRgr51-juuumrbvbEZ4V8k&usqp=CAU"
-              alt="User Avatar"
+              alt="Avatar utilisateur"
               loading="lazy"
               className={styles.prof}
             />
           </div>
           <div
-            className={`${styles.dropdownMenu} ${
-              profileDropdownOpen ? styles.open : ""
-            }`}
+            className={`${styles.dropdownMenu} ${profileDropdownOpen ? styles.open : ""
+              }`}
           >
             <div className={styles.dropdownItem}>
               <span className={styles.userName}>
-                {userName} <span className={styles.userRole}>({userRole})</span>
+                {userName} <span className={styles.userRole}>({displayRole})</span>
               </span>
             </div>
             <div className={styles.dropdownItem}>
@@ -166,7 +176,7 @@ const Header = () => {
       {notificationDropdownOpen && (
         <div className={styles.notificationDropdown}>
           {loading ? (
-            <div className={styles.notificationItem}>Loading...</div>
+            <div className={styles.notificationItem}>Chargement...</div>
           ) : notifications.length > 0 ? (
             notifications.map((notification, index) => (
               <div key={index} className={styles.notificationItem}>
@@ -182,7 +192,7 @@ const Header = () => {
               </div>
             ))
           ) : (
-            <div className={styles.notificationItem}>No new notifications</div>
+            <div className={styles.notificationItem}>Aucune nouvelle notification</div>
           )}
         </div>
       )}
